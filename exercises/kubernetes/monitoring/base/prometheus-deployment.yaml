@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  strategy:
+    type: Recreate
+  template:
+      metadata:
+        labels:
+          app: prometheus
+      spec:
+        serviceAccount: prometheus
+        containers:
+        - name: prometheus
+          image: quay.io/prometheus/prometheus:v2.4.3
+          args:
+          - "--config.file=/etc/config/prometheus.yml"
+          - "--storage.tsdb.path=/data"
+          ports:
+          - name: http
+            containerPort: 9090
+          volumeMounts:
+          - name: config
+            mountPath: /etc/config
+          - name: rules
+            mountPath: /etc/prometheus-rules
+          - name: data
+            mountPath: /data
+        volumes:
+        - name: config
+          configMap:
+            name: prometheus-config
+        - name: rules
+          configMap:
+            name: prometheus-rules
+        - name: data
+          persistentVolumeClaim:
+            claimName: prometheus-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: prometheus
+    job: prometheus
+  name: prometheus
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    nodePort: 30990
+    targetPort: 9090
+  selector:
+    app: prometheus

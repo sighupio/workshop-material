@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web
+data:
+  COMPANY: SIGHUP
+  SOME_VAR: test

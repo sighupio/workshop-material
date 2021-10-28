@@ -1,0 +1,23 @@
+#!/bin/sh
+docker pull alpine:3.8
+docker pull docker.elastic.co/elasticsearch/elasticsearch:6.4.1
+docker pull docker.elastic.co/kibana/kibana:6.4.1
+docker pull elasticsearch:5.4.3
+docker pull gcr.io/google_containers/fluentd-elasticsearch:1.22
+docker pull grafana/grafana:5.3.4
+docker pull justwatch/elasticsearch_exporter:1.0.2
+docker pull kibana:5.4.3
+docker pull mongo:4.1.5-xenial
+docker pull nginx:1.7.9
+docker pull nginx:1.9.1
+docker pull nginx:alpine
+docker pull perl
+docker pull progrium/stress:latest
+docker pull quay.io/prometheus/alertmanager:v0.15.3
+docker pull quay.io/prometheus/node-exporter:v0.17.0
+docker pull quay.io/prometheus/prometheus:v2.4.3
+docker pull quay.io/sighup/mongodb_exporter:v0.6.2
+docker pull redis
+docker pull sighup/fluentd-elasticsearch:1.2.8
+docker pull sighup/powerapp-backend
+docker pull sighup/powerapp-frontend

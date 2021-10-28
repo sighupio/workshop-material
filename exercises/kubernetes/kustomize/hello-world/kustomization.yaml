@@ -1,0 +1,14 @@
+namespace: default
+
+commonLabels:
+  app: hello
+
+resources:
+- deployment.yaml
+- service.yaml
+
+secretGenerator:
+- name: the-secret
+  commands:
+    altGreeting: "cat secret.conf"
+    enableRisky: "printf false"

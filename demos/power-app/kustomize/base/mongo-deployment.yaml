@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: powerapp-mongodb
+  name: powerapp-mongodb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # All existing pods are killed before creating new ones
+  selector:
+    matchLabels:
+      app: powerapp-mongodb
+  template:
+    metadata:
+      labels:
+        app: powerapp-mongodb
+      name: powerapp-mongodb
+    spec:
+      containers:
+      - name: powerapp-mongo
+        image: registry.sighup.io/workshop/mongo:4.1.5-xenial
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /data/db
+          name: db-data
+      restartPolicy: Always
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: powerapp-db-volume

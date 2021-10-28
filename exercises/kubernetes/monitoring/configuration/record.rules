@@ -1,0 +1,5 @@
+groups:
+- name: node-exporter
+  rules:
+  - record: instance:node_cpu_utilisation:avg1m
+    expr: 1 - avg by (instance) (rate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[1m]))

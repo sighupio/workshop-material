@@ -1,0 +1,28 @@
+namespace: monitoring
+
+resources:
+- alertmanager-persistentvolumeclaim.yaml
+- alertmanager-deployment.yaml
+- grafana.yaml
+- ns.yaml
+- prometheus-persistentvolumeclaim.yaml
+- prometheus-rbac.yaml
+- prometheus-deployment.yaml
+
+configMapGenerator:
+- name: alertmanager-config
+  files:
+  - alertmanager.yml
+- name: prometheus-config
+  files:
+  - prometheus.yml
+- name: prometheus-rules
+- name: grafana-dashboards
+  files:
+  - dashboards.yaml
+- name: grafana-dashboard-nodes
+  files:
+  - nodes-dashboard.json
+- name: grafana-datasources
+  files:
+  - grafana-prometheus.yml

@@ -1,0 +1,16 @@
+groups:
+- name: node.alerts
+  rules:
+  - alert: HeartBeat
+    expr: vector(1)
+    labels:
+      severity: none
+    annotations:
+      message: "Heartbeat to ensure that the alerting pipeline is functional."
+  - alert: NodeHighCpuUtilisation
+    expr: instance:node_cpu_utilisation:avg1m > 0.9
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      message: “High CPU usage on {{ $labels.instance }}.”

@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  # activeDeadlineSeconds: 100
+  # completions: 10
+  # parallelism: 3
+  template:
+    metadata:
+      name: pi
+    spec:
+      containers:
+      - name: pi
+        image: registry.sighup.io/workshop/perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never # Only Never or OnFailure is allowed

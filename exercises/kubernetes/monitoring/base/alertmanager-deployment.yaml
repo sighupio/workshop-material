@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  labels:
+    app: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: quay.io/prometheus/alertmanager:v0.15.3
+        args:
+        - "--config.file=/etc/config/alertmanager.yml"
+        - "--storage.path=/data"
+        ports:
+        - name: alertmanager
+          containerPort: 9093
+        livenessProbe:
+          httpGet:
+            path: /#/status
+            port: 9093
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /#/status
+            port: 9093
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        volumeMounts:
+          - name: config
+            mountPath: /etc/config
+          - name: data
+            mountPath: /data
+      volumes:
+      - name: config
+        configMap:
+          name: alertmanager-config
+      - name: data
+        persistentVolumeClaim:
+          claimName: alertmanager-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: alertmanager
+  name: alertmanager
+spec:
+  type: NodePort
+  ports:
+  - port: 9093
+    nodePort: 30993
+    targetPort: 9093
+  selector:
+    app: alertmanager

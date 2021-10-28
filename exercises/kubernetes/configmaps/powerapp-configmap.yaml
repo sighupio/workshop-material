@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web
+data:
+  COMPANY: SIGHUP srl
+  SOME_VAR: Just a random variable

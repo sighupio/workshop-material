@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-demo
+  labels:
+    app: webapp-demo
+spec:
+  selector:
+    matchLabels:
+      app: webapp-demo
+  template:
+    metadata:
+      labels:
+        app: webapp-demo
+    spec:
+      containers:
+      - name: webapp-demo
+        image: registry.nonnoalex.dev/nonnoalex/webapp-demo
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 80m
+            memory: 128Mi
+

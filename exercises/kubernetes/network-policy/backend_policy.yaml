@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-policy
+  namespace: test
+spec:
+  podSelector:
+    matchLabels:
+      run: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          run: frontend
+    ports:
+    - protocol: TCP
+      port: 80

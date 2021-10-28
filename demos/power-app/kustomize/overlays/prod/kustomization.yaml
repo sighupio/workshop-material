@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: prod
+
+resources:
+  - ../../base/
+  - ns.yaml
+
+patchesStrategicMerge:
+  - web-deployment-replicas.yaml
+  - mongo-deployment-replicas.yaml
+  - backend-deployment-replicas.yaml
+  - web-deployment-resources.yaml
+
+secretGenerator:
+- name: web
+  namespace: prod
+  files:
+  - some-password=secrets/password.txt
+
+configMapGenerator:
+- name: web
+  namespace: prod
+  literals:
+  - COMPANY=SIGHUP
+  - SOME_VAR=dev

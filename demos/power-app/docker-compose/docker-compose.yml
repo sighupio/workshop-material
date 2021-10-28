@@ -1,0 +1,41 @@
+---
+
+version: "3"
+
+services:
+  web:
+    image: "sighup/powerapp-frontend"
+    build:
+      context: ./frontend
+    environment:
+      - "BACKEND_HOST=backend"
+    ports:
+     - "80:80"
+    links:
+      - "backend"
+    networks:
+      - "kubeprimer"
+
+  backend:
+    image: "sighup/powerapp-backend"
+    build:
+      context: ./backend
+    environment:
+      - "MONGO_HOST=mongo"
+    links:
+      - "mongo"
+    networks:
+      - "kubeprimer"
+
+  mongo:
+    image: "mongo:4.0.4"
+    volumes:
+      - "kubeprimer-db:/data/db"
+    networks:
+      - "kubeprimer"
+
+volumes:
+  kubeprimer-db:
+
+networks:
+  kubeprimer:

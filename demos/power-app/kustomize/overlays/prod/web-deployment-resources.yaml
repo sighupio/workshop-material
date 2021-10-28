@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: powerapp-web
+  name: powerapp-web
+spec:
+  template:
+    spec:
+      containers:
+      - name: powerapp-web
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "400m"

@@ -1,0 +1,15 @@
+namespace: logging
+
+resources:
+- elasticsearch.yaml
+- fluentd.yaml
+- kibana.yaml
+- ns.yaml
+- rbac.yaml
+
+configMapGenerator:
+- name: fluentd-conf
+  files:
+  - fluent.conf
+  - systemd.conf
+  - kubernetes.conf

@@ -1,0 +1,28 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-ingress
+spec:
+  rules:
+    - host: hello-kustomize.staging.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-svc
+                port:
+                  number: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: hello-app
+        image: gcr.io/google-samples/hello-app:2.0

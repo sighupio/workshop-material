@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - mongo-deployment.yaml
+  - mongo-pvc.yaml
+  - mongo-service.yaml
+  #- powerapp-configmap.yaml
+  #- powerapp-secrets.yaml
+  - web-deployment.yaml
+  - web-nodeport.yaml

@@ -1,0 +1,10 @@
+namespace: monitoring
+
+bases:
+- ../configuration
+
+configMapGenerator:
+- name: prometheus-rules
+  behavior: merge
+  files:
+    - alert.rules

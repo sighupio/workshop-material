@@ -1,0 +1,12 @@
+controller:
+  tag: "2.289.2-lts"
+  ingress:
+    enabled: false
+    apiVersion: networking.k8s.io/v1
+    hostName: jenkins.192.168.64.2.nip.io
+  installPlugins:
+  - kubernetes:1.30.0
+  - workflow-aggregator:2.6
+  - git:4.8.2
+  - configuration-as-code:1.53
+  - blueocean:1.25.0

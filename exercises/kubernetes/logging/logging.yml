@@ -1,0 +1,106 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  template:
+    metadata:
+      labels:
+        app: logging
+        id: fluentd
+      name: fluentd
+    spec:
+      containers:
+        - name: fluentd-es
+          image: gcr.io/google_containers/fluentd-elasticsearch:1.22
+          volumeMounts:
+            - name: varlibdockercontainers
+              mountPath: /mnt/sda1/var/lib/docker/containers
+            - name: varlibboot2docker
+              mountPath: /var/lib/boot2docker
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+      volumes:
+        - hostPath:
+            path: /mnt/sda1/var/lib/boot2docker
+          name: varlibboot2docker
+        - hostPath:
+            path: /mnt/sda1/var/lib/docker/containers
+          name: varlibdockercontainers
+        - hostPath:
+            path: /var/log
+          name: varlog
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: logging
+    id: elasticsearch-logging
+  name: elasticsearch-logging
+spec:
+  ports:
+    - port: 9200
+  selector:
+    app: logging
+    id: elasticsearch-logging
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: elasticsearch-logging
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: logging
+        id: elasticsearch-logging
+    spec:
+      containers:
+        - name: elasticsearch-logging
+          image: elasticsearch:5.4.3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9200
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: logging
+    id: kibana-logging
+  name: kibana-logging
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 5601
+  selector:
+    app: logging
+    id: kibana-logging
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kibana-logging
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: logging
+        id: kibana-logging
+    spec:
+      containers:
+        - name: kibana-logging
+          env:
+            - name: ELASTICSEARCH_URL
+              value: http://elasticsearch-logging:9200
+          image: kibana:5.4.3
+          ports:
+            - containerPort: 5601

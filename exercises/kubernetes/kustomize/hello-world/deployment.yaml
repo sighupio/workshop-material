@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        deployment: hello
+    spec:
+      containers:
+      - name: default
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        env:
+        - name: ALT_GREETING
+          valueFrom:
+            secretKeyRef:
+              name: the-secret
+              key: altGreeting
+        - name: ENABLE_RISKY
+          valueFrom:
+            secretKeyRef:
+              name: the-secret
+              key: enableRisky

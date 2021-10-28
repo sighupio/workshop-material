@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: powerapp-mongodb
+  name: powerapp-mongodb
+spec:
+  replicas: 1

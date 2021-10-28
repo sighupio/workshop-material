@@ -1,0 +1,18 @@
+namespace: monitoring
+
+bases:
+- ../base
+
+resources:
+- mongodb-exporter.yaml
+- node-exporter.yaml
+
+configMapGenerator:
+- name: prometheus-config
+  behavior: merge
+  files:
+  - prometheus.yml
+- name: prometheus-rules
+  behavior: merge
+  files:
+  - record.rules

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mongo-exporter
+  name: mongo-exporter
+spec:
+  replicas: 1
+  # strategy used to replace old pods by new ones.
+  strategy:
+    type: Recreate # All existing pods are killed before creating new ones
+  selector: 
+    matchLabels:
+      app: mongo-exporter
+  template:
+    metadata:
+      labels:
+        app: mongo-exporter
+    spec:
+      containers:
+      - name: mongodb-exporter
+        image: quay.io/sighup/mongodb_exporter:v0.6.2
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://powerapp-mongodb-service:27017"
+        ports:
+        - name: metrics
+          containerPort: 9216
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9216'
+  creationTimestamp: null
+  labels:
+    app: mongo-exporter
+  name: mongo-exporter
+spec:
+  ports:
+  - name: metrics
+    port: 9216
+    targetPort: 9216
+    protocol: TCP
+  selector:
+    app: mongo-exporter

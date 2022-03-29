@@ -4,7 +4,7 @@ spec:
   serviceAccount: jenkins
   containers:
   - name: shell
-    image: alpine
+    image: registry.sighup.io/workshop/alpine
     command:
     - cat
     tty: true
@@ -17,7 +17,7 @@ spec:
     - name: kaniko-secret
       mountPath: /kaniko/.docker/
   - name: kustomize
-    image: nekottyo/kustomize-kubeval
+    image: registry.sighup.io/workshop/kustomize-kubeval
     command:
     - cat
     tty: true

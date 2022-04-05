@@ -1,0 +1,8 @@
+apiVersion: bestpizza.io/v1alpha1
+kind: Pizza
+metadata:
+  name: one-pizza
+spec:
+  pizza: Margherita
+  customer: Sighup
+  store: Bologna

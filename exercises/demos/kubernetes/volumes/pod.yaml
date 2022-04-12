@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-user
+spec:
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: alpha-claim
+  containers:
+    - name: task-pv-container
+      image: registry.sighup.io/workshop/nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: storage

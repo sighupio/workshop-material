@@ -1,0 +1,11 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: hello-app
+        image: gcr.io/google-samples/hello-app:2.0

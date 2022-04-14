@@ -47,7 +47,7 @@ More information about [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/).
 </details>
 <br>
 
-- [ ] [Play with Kind](cluster-setup/kind)
+- [X] [Play with Kind](cluster-setup/kind)
 
 #### Minikube
 <details>

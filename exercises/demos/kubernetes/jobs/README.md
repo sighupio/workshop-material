@@ -1,9 +1,9 @@
 # Playing with Jobs
 
-In `kubernetes/jobs/` you will find a simple example of job. This is a dummy job, meaning that it doesn't do any real work. It will boot a pod that will calculate `pi`, it will take about 10 sec to complete.
+In `exercises/demos/kubernetes/jobs` you will find a simple example of job. This is a dummy job, meaning that it doesn't do any real work. It will boot a pod that will calculate `pi`, it will take about 10 sec to complete.
 
 We can deploy the job by running:  
-`kubectl apply -f jobs/job.yaml`
+`kubectl apply -f job.yaml`
 
 Output is going to be:
 
@@ -11,6 +11,13 @@ Output is going to be:
 kubectl get pods
 NAME       READY     STATUS    RESTARTS   AGE
 pi-d9s7s   1/1       Running   0          <invalid>
+```
+
+Output is going to be:
+
+```bash
+kubectl logs pi-d9s7s
+3.14159265358.....
 ```
 
 The pod will show up as running until the job gets to completion, after that the process will end and kubernetes will consider the job as concluded.

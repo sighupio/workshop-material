@@ -108,12 +108,15 @@ Now we can start to expose the pods to the outer world and to each others.
 Let's start with `web`. As I mentioned this is the only pod that will be reachable from outside the cluster.
 
 ```bash
-kubectl apply -f services/web-service-nodeport.yaml
+kubectl apply -f services/web-service-cluster-ip.yaml
+```
+Create port-forward tunnel:
+```bash
+kubectl port-forward svc/powerapp-web-service 8080:80
 ```
 
-Now, if you do `minikube ip` you can get the IP of the minikube node exposing the service. To get what port is exposing our service, we can use `kubectl get services`. Now visiting `<minikube_ip>:<port>` should show the frontend application.
+Now visiting `localhost:8080` should show the frontend application.
 
-You are seeing the `NodePort` service in action, where each node of the cluster will expose a random port and serve traffic from your pod there.
 
 We can now rollout services for `backend` and `mongodb` in a similar way. Once that is done, reloading the frontend page should show no error and magically our application works.
 
@@ -124,11 +127,11 @@ kubectl apply -f services/mongo-service.yaml
 
 But what is really happening here? Let's discuss this together.
 
-## Exposing applications via Ingress
+## Exposing applications via Ingress (Minikube users)
 
-So far we have exposed the frontend using `NodePort`, but accessing the service with the combination `<ip>:<port>` isn't exactly ideal. Time to see something more advanced: `Ingress`
+So far we have exposed the frontend using `ClusterIP`, but accessing the service with the combination `<ip>:<port>` isn't exactly ideal. Time to see something more advanced: `Ingress`
 
-`minikube addons enable ingress`
+`cd cluster-setup/minikube && make addons`
 
 We can apply the ingress as follows:
 

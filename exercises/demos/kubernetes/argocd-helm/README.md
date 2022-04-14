@@ -55,7 +55,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 - Click `Create`
 - On Top click `SYNC APP`
 
-# *** Creating App with CLI***
+# ***Creating App with CLI***
 ```
 argocd login `localhost:8080`
 argocd app create `<APP_NAME>` --repo https://github.com/nikever/kubernetes-hello-app-delivery.git --path argocd-helm/nginx --dest-server https://kubernetes.default.svc --dest-namespace default --port-forward-namespace argocd

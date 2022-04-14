@@ -1,5 +1,5 @@
-kubernetes-version?=v1.21.2
-driver?=virtualbox
+kubernetes-version?=v1.23.4
+driver?=docker
 memory?=2048
 cpu?=2
 cni?=calico

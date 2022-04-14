@@ -18,8 +18,8 @@ By default it creates a cluster with the following parameters:
 
 ```bash
 minikube start \
-    --driver virtualbox \
-    --kubernetes-version v1.21.2 \
+    --driver docker \
+    --kubernetes-version v1.23.4 \
     --cni cilium \
     --memory 2048 \
     --cpus 2

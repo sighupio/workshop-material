@@ -1,0 +1,42 @@
+apiVersion: apps/v1 # Version of the Kubernetes API to use, necessary for kubectl
+kind: Deployment
+metadata:
+  name: imaginarygame # Name referenced during the deployment life
+spec:
+  replicas: 3 # Desired state ensured by rs
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels: # Labels (simple key-values) associated with the pod
+        app: nginx
+    spec:
+      containers:
+      - name: game-container
+        image: registry.sighup.io/workshop/nginx
+        env:
+        # consume the property-like keys in environment variables
+        - name: GAME_PROPERTIES_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: example-configmap
+              key: game-properties-file-name
+        - name: UI_PROPERTIES_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: example-configmap
+              key: ui-properties-file-name
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/game
+      volumes:
+      # consume the file-like keys of the configmap via volume plugin
+      - name: config-volume
+        configMap:
+          name: example-configmap
+          items:
+          - key: ui.properties
+            path: cfg/ui.properties
+          - key: game.properties
+            path: cfg/game.properties

@@ -9,6 +9,6 @@ resources:
 
 secretGenerator:
 - name: the-secret
-  commands:
-    altGreeting: "cat secret.conf"
-    enableRisky: "printf false"
+  literals:
+  - altGreeting=superSecretP
+  - enableRisky=false

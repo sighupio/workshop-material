@@ -108,6 +108,7 @@ This type of exercises will guide you step by step in understanding the various 
 - [X] [Storage](exercises/demos/kubernetes/volumes)
 - [X] [Multi Tier App](exercises/demos/kubernetes/power-app)
 - [X] [RBAC](exercises/demos/kubernetes/rbac)
+- [X] [Network Policies](exercises/demos/kubernetes/network-policy)
 - [X] [Kustomize](exercises/demos/kubernetes/kustomize)
 - [X] [Kustomize multi Env](exercises/demos/kubernetes/kustomize-multi-env)
 - [X] [Helm](exercises/demos/kubernetes/helm)

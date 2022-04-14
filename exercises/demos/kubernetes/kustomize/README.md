@@ -13,7 +13,7 @@ Withing the [kustomization.yaml](hello-world/kustomization.yaml) we define:
 - the name of the files of the manifest being deployed
 - the namespace of the resources being deployed, which kustomize will assign to all resources
 - additional labels to be assigned to all resources
-- the dynamic generation of a secret from a [file on disk](hello-world/secret.conf)
+- the dynamic generation of a secret
 
 To build the hello-world application manifest you can simply use:
 
@@ -29,7 +29,7 @@ kustomize build hello-world | kubectl apply -f -
 
 # Trying changing the secret
 
-If we try to change [secret.conf](hello-world/secret.conf) and then deploy the application again we will see how the deployment is changed:
+If we try to change secret and then deploy the application again we will see how the deployment is changed:
 - we'll have 2 ReplicaSet (2 sets of pods)
 - we'll have 2 Secrets
 

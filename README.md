@@ -14,7 +14,18 @@ With this exercise and demos you will have a good understanding and implementati
 <!-- ABOUT THE REPO -->
 ## About The Repo
 
-This repository will contain a list of hands-on exercises and demos for you to attempt and up skill yourself. 
+This repository will contain a list of hands-on exercises and demos for you to attempt and up skill yourself.
+
+___
+
+### Prerequisites
+
+This tutorial assumes some basic prerequisite, you need:
+
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/)
+- [Helm](https://helm.sh/docs/intro/install/)
+
 
 ## :small_blue_diamond: 1. Cluster Setup
 Curated list of local Kubernetes Clusters

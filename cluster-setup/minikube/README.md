@@ -1,7 +1,16 @@
 # Minikube demo cluster
+___
+
+### Prerequisites
+
+To follow Vagrant tutorial, you need:
+- **Minikube** - Follow installation guide on https://minikube.sigs.k8s.io/docs/start/ to install Minikube
+
+### Start Kubernetes  cluster
+
 
 ```bash
-cd minikube
+
 make minikube   
 ```
 

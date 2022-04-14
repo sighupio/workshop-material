@@ -63,3 +63,19 @@ spec:
 ### Using secrets as mounted volumes
 
 You should mount a volume of type `secret` to the target `path`, that's really all!
+
+Let's deploy
+```bash
+kubectl apply -f secrets/secret.yaml
+kubectl apply -f secrets/pod.yaml
+```
+
+Let's check environment variables
+```bash
+kubectl exec -it secret-env-pod -- env
+```
+
+Let's clean
+```bash
+kubectl delete -f secrets/pod.yaml -f secrets/secret.yaml
+```

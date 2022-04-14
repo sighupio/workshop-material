@@ -28,8 +28,6 @@ spec:
 
 # Let's play a bit
 
-Let's define a baseline: we will issue all our commands from `$PROJECT_HOME/kubernetes`
-
 First of all, let's see the current state of our cluster:
 
 ```bash
@@ -267,3 +265,11 @@ nginx-deployment-4234284026-t8zw6   1/1       Running   0          20s
 nginx-deployment-4234284026-wgsqx   1/1       Running   0          20s
 nginx-deployment-4234284026-wscvp   1/1       Running   0          22m
 ```
+
+After all, let's clean! But first try deleting a pod and look what happened!
+```bash
+kubectl delete pod/nginx-deployment-4234284026-1g7nq
+```
+
+```bash
+kubectl delete -f deployments/nginx-deployment.yaml

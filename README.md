@@ -90,10 +90,9 @@ More information about [Vagrant](https://learn.hashicorp.com/collections/vagrant
 #### Free Kubernetes Online Environment
 - [Killer Coda](https://killercoda.com/playgrounds)
 
-## :small_blue_diamond: 2. Exercises
+## :small_blue_diamond: 2. Examples
 Learning Kubernetes can seem challenging. But fear not! Here's a curated list of delightful set of hands-on labs that covers from the Fundamentals to Certified!
 
-#### :large_orange_diamond: Examples
 This type of exercises will guide you step by step in understanding the various aspects of the technologies.
 
 ##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :white_circle: Docker
@@ -112,7 +111,7 @@ This type of exercises will guide you step by step in understanding the various 
 - [X] [Kustomize](exercises/kubernetes/kustomize)
 - [X] [Kustomize multi Env](exercises/kubernetes/kustomize-2)
 - [X] [Helm](exercises/kubernetes/helm)
-- [X] [Helm](exercises/kubernetes/helm-2)
+- [X] [Helm 2](exercises/kubernetes/helm-2)
 - [X] [Etcd](exercises/kubernetes/etcd)
 - [X] [CRD](exercises/kubernetes/crd)
 - [X] [Debug and Troubleshooting](exercises/kubernetes/debug-troubleshooting)

@@ -93,45 +93,33 @@ More information about [Vagrant](https://learn.hashicorp.com/collections/vagrant
 ## :small_blue_diamond: 2. Exercises
 Learning Kubernetes can seem challenging. But fear not! Here's a curated list of delightful set of hands-on labs that covers from the Fundamentals to Certified!
 
-#### :large_orange_diamond: Demos
+#### :large_orange_diamond: Examples
 This type of exercises will guide you step by step in understanding the various aspects of the technologies.
 
 ##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :white_circle: Docker
-- [X] [PowerApp by SIGHUP](exercises/demos/docker)
+- [X] [PowerApp by SIGHUP](exercises/docker)
 ##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :white_circle: Kubernetes
-- [X] [Play with cluster](exercises/demos/kubernetes/play-with-cluster)
-- [X] [Deployments](exercises/demos/kubernetes/deployments)
-- [X] [ConfigMaps](exercises/demos/kubernetes/configmaps)
-- [X] [Secrets](exercises/demos/kubernetes/secrets)
-- [X] [Jobs](exercises/demos/kubernetes/jobs)
-- [ ] [Services](exercises/demos/kubernetes/services)
-- [X] [Storage](exercises/demos/kubernetes/volumes)
-- [X] [Multi Tier App](exercises/demos/kubernetes/power-app)
-- [X] [RBAC](exercises/demos/kubernetes/rbac)
-- [X] [Network Policies](exercises/demos/kubernetes/network-policy)
-- [X] [Kustomize](exercises/demos/kubernetes/kustomize)
-- [X] [Kustomize multi Env](exercises/demos/kubernetes/kustomize-multi-env)
-- [X] [Helm](exercises/demos/kubernetes/helm)
-- [X] [Etcd](exercises/demos/kubernetes/etcd)
-- [X] [CRD](exercises/demos/kubernetes/crd)
-- [X] [Debug and Troubleshooting](exercises/demos/kubernetes/debug-troubleshooting)
-- [X] [Jenkins Kaniko Kustomize](exercises/demos/kubernetes/jenkins-kaniko-kustomize)
-- [X] [ArgoCD with Helm](exercises/demos/kubernetes/argocd-helm)
-- [X] [Logging](exercises/demos/kubernetes/logging)
-- [ ] [Monitoring](exercises/demos/kubernetes/monitoring)
-#### :large_orange_diamond: Skill Tests
-Test your ability to work with real hands-on kubernetes mock exam exercises. Let's do practice tests with solutions, tips and advice.
-
-##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :white_circle: CKA
-- [ ] [Exercises](exercises/skill-tests/cka)
-##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :white_circle: CKAD
-- [ ] [Exercises](exercises/skill-tests/ckad)
-##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :white_circle: CKS
-- [ ] [Exercises](exercises/skill-tests/cks)
-##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :white_circle: GENERICS
-- [X] [Helm](exercises/skill-tests/generics/helm)
-- [X] [Kustomize](exercises/skill-tests/generics/kustomize)
-
+- [X] [Play with cluster](exercises/kubernetes/play-with-cluster)
+- [X] [Deployments](exercises/kubernetes/deployments)
+- [X] [ConfigMaps](exercises/kubernetes/configmaps)
+- [X] [Secrets](exercises/kubernetes/secrets)
+- [X] [Jobs](exercises/kubernetes/jobs)
+- [ ] [Services](exercises/kubernetes/services)
+- [X] [Storage](exercises/kubernetes/volumes)
+- [X] [Multi Tier App](exercises/kubernetes/power-app)
+- [X] [RBAC](exercises/kubernetes/rbac)
+- [X] [Network Policies](exercises/kubernetes/network-policy)
+- [X] [Kustomize](exercises/kubernetes/kustomize)
+- [X] [Kustomize multi Env](exercises/kubernetes/kustomize-2)
+- [X] [Helm](exercises/kubernetes/helm)
+- [X] [Helm](exercises/kubernetes/helm-2)
+- [X] [Etcd](exercises/kubernetes/etcd)
+- [X] [CRD](exercises/kubernetes/crd)
+- [X] [Debug and Troubleshooting](exercises/kubernetes/debug-troubleshooting)
+- [X] [Jenkins Kaniko Kustomize](exercises/kubernetes/jenkins-kaniko-kustomize)
+- [X] [ArgoCD with Helm](exercises/kubernetes/argocd-helm)
+- [X] [Logging](exercises/kubernetes/logging)
+- [ ] [Monitoring](exercises/kubernetes/monitoring)
 <br>
 
 > ⚠️ **This repo is still quite new and we are working on adding as many learning resources and projects as possible, so please do bear with us**

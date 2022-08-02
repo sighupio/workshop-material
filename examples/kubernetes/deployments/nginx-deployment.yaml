@@ -1,0 +1,21 @@
+apiVersion: apps/v1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        #image: registry.sighup.io/workshop/nginx:1.7.9
+        image: registry.sighup.io/workshop/nginx:1.9.1
+        # image: registry.sighup.io/workshop/nginx:1.91
+        ports:
+        - containerPort: 80

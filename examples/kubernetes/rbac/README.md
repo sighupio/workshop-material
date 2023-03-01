@@ -4,7 +4,7 @@ Deploy in your cluster the manifest with the command:
 
 ```bash
 kubectl create ns debug
-kubectl apply -f 7-rbac/rbac.yaml
+kubectl apply -f rbac/rbac.yaml
 ```
 
 Great!

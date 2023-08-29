@@ -1,0 +1,239 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: clone-build-push
+spec:
+  description: |
+    This pipeline clones a git repo, builds a Docker image with Kaniko and
+    pushes it to a registry
+  params:
+  - name: repo-url
+    type: string
+  - name: python-version
+    type: string
+  - name: image-reference-prod
+    type: string
+  - name: dockerfile-path
+    type: string
+  - name: docker-linting-ignore-rules
+    type: string
+  - name: helm-chart-dir
+    type: string
+  - name: docker-opa-conftest-policy-location
+    type: string
+  - name: helm-opa-conftest-policy-location
+    type: string
+  - name: trivy-args-image-local
+    type: array
+  - name: helm-release-version
+    type: string
+  - name: helm-release-name
+    type: string
+  workspaces:
+  - name: shared-data
+  tasks:
+  # Clone source code repository
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: $(params.repo-url)
+  # Execute makefile linting
+  - name: makefile-lint
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: check-make
+    workspaces:
+    - name: shared-workspace
+      workspace: shared-data
+    params:
+    - name: args
+      value: ["Makefile"]
+  # Execute markdown linting
+  - name: markdown-lint
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: markdown-lint
+    workspaces:
+    - name: shared-workspace
+      workspace: shared-data
+    params:
+    - name: args
+      value: ["."]
+  # SAST detection of hardcoded secrets (passwords, api keys, and tokens)
+  - name: gitleaks
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: gitleaks
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: repo_path
+      value: ""
+    - name: config_file_url
+      value: https://raw.githubusercontent.com/tektoncd/catalog/main/task/gitleaks/0.1/samples/gitleaks.toml
+    - name: config_file_path
+      value: gitleaks.toml
+    - name: output_format
+      value: json
+    - name: report_output_path
+      value: report.json
+    - name: args
+      value: ["--verbose","--no-git"]
+  # Execute python linting
+  - name: pylint
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: pylint
+    workspaces:
+    - name: source
+      workspace: shared-data
+  # Execute python unit tests
+  - name: pytest
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: python-coverage
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: PYTHON
+      value: $(params.python-version)
+  # Docker file linting
+  - name: docker-lint
+    runAfter: ["fetch-source"]
+    taskRef:
+      kind: Task
+      name: hadolint
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: docker-linting-ignore-rules
+      value: $(params.docker-linting-ignore-rules)
+    - name: dockerfile-path
+      value: $(params.dockerfile-path)
+  # Check Dockerfile against OPA Conftest rules
+  - name: opa-dockerfile-validation
+    runAfter: ["fetch-source"]
+    taskRef:
+      kind: Task
+      name: conftest
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: files
+      value: Dockerfile
+    - name: policy
+      value: $(params.docker-opa-conftest-policy-location)
+  # Helm/k8s manifests linting
+  - name: helm-k8s-lint
+    runAfter: ["fetch-source"]
+    taskRef:
+      kind: Task
+      name: kube-linter
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: manifest
+      value: $(params.helm-chart-dir)
+    - name: default_option
+      value: do-not-auto-add-defaults
+    - name: includelist
+      value: "no-extensions-v1beta"
+  # Check helm manifests against OPA Conftest rules
+  - name: opa-helm-validation
+    runAfter: ["fetch-source"]
+    taskRef:
+      kind: Task
+      name: helm-conftest
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: chart
+      value: $(params.helm-chart-dir)
+    - name: policy
+      value: $(params.helm-opa-conftest-policy-location)
+  # Build OCI Image
+  - name: kaniko-build
+    runAfter: ["makefile-lint", "markdown-lint", "gitleaks", "pylint", "pytest", "docker-lint", "opa-dockerfile-validation", "helm-k8s-lint", "opa-helm-validation"]
+    taskRef:
+      name: kaniko
+      kind: Task
+    params:
+      - name: IMAGE
+        value: $(params.image-reference-prod)
+      - name: EXTRA_ARGS
+        value:
+          - --skip-tls-verify
+          - --insecure
+          - --no-push
+          - --tarPath=image.tar
+    workspaces:
+      - name: source
+        workspace: shared-data
+  # Image scan with trivy
+  - name: trivy-scan-local-image
+    runAfter: ["kaniko-build"]
+    taskRef:
+      name: trivy-scanner
+      kind: Task
+    params:
+      - name: ARGS
+        value: ["$(params.trivy-args-image-local[*])"]
+      - name: IMAGE_PATH
+        value: "/workspace/manifest-dir/image.tar"
+    workspaces:
+      - name: manifest-dir
+        workspace: shared-data
+  # Copy scanned image to production registry
+  - name: skopeo-copy-to-production
+    runAfter: ["trivy-scan-local-image"]
+    taskRef:
+      name: skopeo-copy
+      kind: Task
+    params:
+      - name: srcImageURL
+        value: "docker-archive:workspace/images-url/image.tar"
+      - name: destImageURL
+        value: "docker://$(params.image-reference-prod)"
+      - name: srcTLSverify
+        value: "false"
+    workspaces:
+      - name: images-url
+        workspace: shared-data
+  # cosign
+  - name: cosign
+    runAfter: ["skopeo-copy-to-production"]
+    taskRef:
+      name: cosign
+      kind: Task
+    params:
+    - name: IMAGE
+      value: $(params.image-reference-prod)
+  # Helm install
+  - name: helm-install
+    runAfter: ["cosign"]
+    taskRef:
+      name: helm-upgrade-from-source
+      kind: Task
+    params:
+    - name: charts_dir
+      value: $(params.helm-chart-dir)
+    - name: releases_version
+      value: $(params.helm-release-version)
+    - name: release_name
+      value: $(params.helm-release-name)
+    # - name: overwrite_values
+    #   value: "autoscaling.enabled=true,autoscaling.maxReplicas=3"
+    workspaces:
+      - name: source
+        workspace: shared-data

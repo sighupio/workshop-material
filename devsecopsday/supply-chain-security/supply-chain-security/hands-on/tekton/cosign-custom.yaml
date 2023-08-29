@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cosign
+spec:
+  params:
+    - name: IMAGE
+      description: The image to sign
+  steps:
+    - name: sign-result
+      image: bitnami/cosign:2.0.2
+      script: |
+        yes | cosign sign --key k8s://tekton-chains/signing-secrets "$(params.IMAGE)"
+      securityContext:
+        runAsUser: 0

@@ -1,0 +1,11 @@
+# macos specific files
+.DS_Store
+
+# sighup registry secrets
+registry_credentials.yaml
+
+# cosign public key
+cosign.pub
+
+# conjur api key
+conjur_api_key.txt

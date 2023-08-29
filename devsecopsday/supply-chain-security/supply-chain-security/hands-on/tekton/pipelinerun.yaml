@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: clone-build-push-run-
+spec:
+  pipelineRef:
+    name: clone-build-push
+  taskRunSpecs:
+  - pipelineTaskName: skopeo-copy-to-production
+    taskServiceAccountName: secret-service-account
+  - pipelineTaskName: helm-install
+    taskServiceAccountName: secret-service-account
+  - pipelineTaskName: cosign
+    taskServiceAccountName: secret-service-account
+  podTemplate:
+    securityContext:
+      fsGroup: 65532
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  params:
+  - name: repo-url
+    value: https://github.com/stackzoo/simple-web-app.git
+  - name: python-version
+    value: "3.7"
+  - name: docker-linting-ignore-rules
+    value: 'DL3007,DL3045,DL3042'
+  - name: dockerfile-path
+    value: './Dockerfile'
+  - name: docker-opa-conftest-policy-location
+    value: policy/dockerfile
+  - name: helm-opa-conftest-policy-location
+    value: policy/helm
+  - name: image-reference-prod
+    value: registry.sighup.io/devsecopsday/app:prod
+  - name: helm-chart-dir
+    value: simple-web-app-chart
+  - name: trivy-args-image-local
+    value:
+      - "image"
+      - "--input=image.tar"
+      - "--light"
+      - "--exit-code"
+      - "0"
+  - name: helm-release-version
+    value: v1.0.0
+  - name: helm-release-name
+    value: helm-deployed

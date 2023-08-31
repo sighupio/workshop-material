@@ -1,0 +1,32 @@
+# exposed-api.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: exposed-api-service
+spec:
+  selector:
+    app: exposed-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exposed-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exposed-api
+  template:
+    metadata:
+      labels:
+        app: exposed-api
+    spec:
+      containers:
+        - name: exposed-api-container
+          image: <your-api-image:version>
+          ports:
+            - containerPort: 8080

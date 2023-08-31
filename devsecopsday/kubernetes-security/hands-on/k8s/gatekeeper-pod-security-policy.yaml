@@ -1,0 +1,21 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: disallow-root-containers
+spec:
+  match:
+    kinds:
+      - kinds: ["Pod"]
+  parameters:
+    containers:
+      - name: container
+        description: "Container spec"
+        required: true
+        schema:
+          type: object
+          properties:
+            securityContext:
+              type: object
+              properties:
+                runAsNonRoot:
+                  type: boolean

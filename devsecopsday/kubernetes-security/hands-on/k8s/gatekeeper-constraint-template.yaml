@@ -1,0 +1,27 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: podsecuritypolicy
+spec:
+  crd:
+    spec:
+      names:
+        kind: PodSecurityPolicy
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8s.pod.security
+
+        violation[{"msg": msg, "details": {"missing_fields": missing}}] {
+          container := input.parameters.containers[_]
+          not container.securityContext.runAsNonRoot
+          msg := "Containers must not run as root"
+          missing := {"securityContext.runAsNonRoot": true}
+        }
+
+        violation[{"msg": msg, "details": {"missing_fields": missing}}] {
+          container := input.parameters.initContainers[_]
+          not container.securityContext.runAsNonRoot
+          msg := "Init containers must not run as root"
+          missing := {"securityContext.runAsNonRoot": true}
+        }

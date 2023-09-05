@@ -34,8 +34,8 @@ Finally, we create the `service-reader-secrets` [cluster role binding](https://k
 Without this operation, the `cosign` task will fail with the following error:  
 
 ```console
-Error: signing [registry.sighup.io/devsecopsday/app:prod]: getting signer: reading key: checking if secret exists: secrets "signing-secrets" is forbidden: User "system:serviceaccount:default:secret-service-account" cannot get resource "secrets" in API group "" in the namespace "tekton-chains"
-main.go:74: error during command execution: signing [registry.sighup.io/devsecopsday/app:prod]: getting signer: reading key: checking if secret exists: secrets "signing-secrets" is forbidden: User "system:serviceaccount:default:secret-service-account" cannot get resource "secrets" in API group "" in the namespace "tekton-chains"
+Error: signing [registry.sighup.io/workshop/app:prod]: getting signer: reading key: checking if secret exists: secrets "signing-secrets" is forbidden: User "system:serviceaccount:default:secret-service-account" cannot get resource "secrets" in API group "" in the namespace "tekton-chains"
+main.go:74: error during command execution: signing [registry.sighup.io/workshop/app:prod]: getting signer: reading key: checking if secret exists: secrets "signing-secrets" is forbidden: User "system:serviceaccount:default:secret-service-account" cannot get resource "secrets" in API group "" in the namespace "tekton-chains"
 ```  
 
 Continue to [Unleash the Pipeline](08-unleash-pipeline.md)

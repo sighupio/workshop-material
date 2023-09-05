@@ -38,7 +38,7 @@ spec:
   - name: helm-opa-conftest-policy-location
     value: policy/helm
   - name: image-reference-prod
-    value: registry.sighup.io/devsecopsday/app:prod
+    value: registry.sighup.io/workshop/app:prod
   - name: helm-chart-dir
     value: simple-web-app-chart
   - name: trivy-args-image-local

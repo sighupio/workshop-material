@@ -63,12 +63,12 @@ Make sure that your local docker agent can log in to the registry that we are us
 Now simply run:
 
 ```console
-cosign verify --key k8s://tekton-chains/signing-secrets registry.sighup.io/devsecopsday/app:prod
+cosign verify --key k8s://tekton-chains/signing-secrets registry.sighup.io/workshop/app:prod
 ```
 
 Output:
 ```console
-Verification for registry.sighup.io/devsecopsday/app:prod --
+Verification for registry.sighup.io/workshop/app:prod --
 The following checks were performed on each of these signatures:
   - The cosign claims were validated
   - Existence of the claims in the transparency log was verified offline

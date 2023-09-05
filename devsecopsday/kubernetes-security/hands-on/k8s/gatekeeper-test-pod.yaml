@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gatekeeper-test-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+      securityContext:
+        runAsNonRoot: false   # not permitted !!!

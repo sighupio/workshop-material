@@ -60,14 +60,14 @@ spec:
       description: The image to sign
   steps:
     - name: sign-result
-      image: bitnami/cosign:2.0.2
+      image: bitnami/cosign:2.2.0
       script: |
         yes | cosign sign --key k8s://tekton-chains/signing-secrets "$(params.IMAGE)"
       securityContext:
         runAsUser: 0
 ```  
 Here we can observe what a tekton task specification looks like.  
-This task pull the `bitnami/cosign:2.0.2` image and use it to sign our image.  
+This task pull the `bitnami/cosign:2.2.0` image and use it to sign our image.  
 we'll come back to it later to dive into some details, including how this task uses secrets to connect to the docker registry.  
 
 Apply the cosign task manifest and the custom skopeo task:  

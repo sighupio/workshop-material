@@ -70,9 +70,9 @@ Here we can observe what a tekton task specification looks like.
 This task pull the `bitnami/cosign:2.0.2` image and use it to sign our image.  
 we'll come back to it later to dive into some details, including how this task uses secrets to connect to the docker registry.  
 
-Apply the cosign task manifest:  
+Apply the cosign task manifest and the custom skopeo task:  
 ```console
-kubectl apply -f hands-on/tekton/cosign-custom.yaml
+kubectl apply -f hands-on/tekton/cosign-custom.yaml && kubectl apply -f hands-on/tekton/skopeo-custom-task.yaml
 
 task.tekton.dev/cosign created
 ```  

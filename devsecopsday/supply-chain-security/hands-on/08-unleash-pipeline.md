@@ -3,7 +3,9 @@
 We are almost ready to launch our pipeline.  
 Create tekton `pipeline` and `pipelinerun` resources (this will automatically start the pipeline run):  
 > **Note**
-> Before running the following command create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
+> > In order to push and pull from SIGHUP registry you need the credentials.  
+> If you want to try this at home use your own registry 😁
+> Create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
 
 ```yaml
 apiVersion: v1
@@ -18,9 +20,7 @@ stringData:
   password: <your_registry_password>
 ```
 
-> **Note**
-> In order to push and pull from SIGHUP registry you need the credentials.  
-> If you want to try this at home use your own registry 😁
+
 
 Now you are good to go!  
 > **Note**

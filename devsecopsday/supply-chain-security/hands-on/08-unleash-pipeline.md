@@ -17,8 +17,13 @@ stringData:
   password: <your_registry_password>
 ```
 
+> **Note**
+> In order to push from SIGHUP registry you need the credentials. 
+> If you want to try this at home use your own registry.
+
 Now you are good to go!  
-> *NOTE*: the first time you spin up this environment, the pipeline will take some time to run   
+> **Note**
+> The first time you spin up this environment, the pipeline will take some time to run   
 > because our cluster need to pull all the images that are used by the tasks.  
 
 ```console

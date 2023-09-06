@@ -19,6 +19,8 @@ For example, one task might need to authenticate to a public cloud provider to p
 another to authenticate to an OCI image registry, yet another to authenticate to a database, etc.  
 ![secret-manager-schema](images/secret-manager-schema.png)
 
+>NOTE: the following step is optional and requires the user to have both access to SIGHUP Conjur instance and a Conjur API KEY.
+
 We've added a simple tekton task that demonstrates reading a secret from a remote secret manager ([**Cyberark's Conjur**](https://www.conjur.org/) in this case).  
 To launch it you need the `hands-on/tekton/conjur_api_key.txt` file, containing the conjur rest api key.  
 Launch the following command (you need to be connected to sighup private network via *OpenVPN* in order for the task to work):  

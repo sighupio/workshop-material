@@ -2,7 +2,8 @@
 
 We are almost ready to launch our pipeline.  
 Create tekton `pipeline` and `pipelinerun` resources (this will automatically start the pipeline run):  
-> *NOTE*: before running the following command create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
+> **Note**
+> Before running the following command create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
 
 ```yaml
 apiVersion: v1

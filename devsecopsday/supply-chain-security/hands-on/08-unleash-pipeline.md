@@ -18,7 +18,7 @@ stringData:
 ```
 
 > **Note**
-> In order to push from SIGHUP registry you need the credentials.  
+> In order to push and pull from SIGHUP registry you need the credentials.  
 > If you want to try this at home use your own registry.
 
 Now you are good to go!  

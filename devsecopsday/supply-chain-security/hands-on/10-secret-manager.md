@@ -46,7 +46,7 @@ Now inspect the taskrun via tekton dashboard:
 <br/>
 
 > **Warning**
-> IN a real world scenario you should never display any secrets in the pipeline's logs!
+> In a real world scenario you should never display any secrets in the pipeline's logs!
 
 
 Continue to [Frameworks](11-frameworks.md)

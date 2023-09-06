@@ -19,7 +19,8 @@ For example, one task might need to authenticate to a public cloud provider to p
 another to authenticate to an OCI image registry, yet another to authenticate to a database, etc.  
 ![secret-manager-schema](images/secret-manager-schema.png)
 
->NOTE: the following step is optional and requires the user to have both access to SIGHUP Conjur instance and a Conjur API KEY.
+> **Note**
+> The following step is optional and requires the user to have both access to SIGHUP Conjur instance and a Conjur API KEY.
 
 We've added a simple tekton task that demonstrates reading a secret from a remote secret manager ([**Cyberark's Conjur**](https://www.conjur.org/) in this case).  
 To launch it you need the `hands-on/tekton/conjur_api_key.txt` file, containing the conjur rest api key.  
@@ -43,6 +44,9 @@ Now inspect the taskrun via tekton dashboard:
 ![retrieve-secret-task](images/retrieve_secret_task.png)
 
 <br/>
+
+> **Warning**
+> IN a real world scenario you should never display any secrets in the pipeline's logs!
 
 
 Continue to [Frameworks](11-frameworks.md)

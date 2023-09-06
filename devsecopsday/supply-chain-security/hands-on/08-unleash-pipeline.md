@@ -5,7 +5,8 @@ Create tekton `pipeline` and `pipelinerun` resources (this will automatically st
 > **Note**
 > In order to push and pull from SIGHUP registry you need the credentials.  
 > If you want to try this at home use your own registry 😁  
-> Create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
+
+Create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
 
 ```yaml
 apiVersion: v1

@@ -4,7 +4,11 @@ We are going to inspect the pipeline log from the dashboard, just run:
 ```console
 kubectl port-forward -n tekton-pipelines service/tekton-dashboard 9097:9097
 ```
-and then open a browser to http://localhost:9097.
+and then open a browser to http://localhost:9097.  
+
+> **Note**
+>  If you are following the containerday workshop on site (aws infrastructure) in order to expose the dashboard  
+> you need to edit the service/tekton-dashboard into a NodePort service.
 
 After a few minutes, our pipeline has terminated successfully:
 ![pipeline](images/pipeline.png)

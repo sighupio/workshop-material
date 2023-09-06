@@ -74,7 +74,6 @@ Apply the cosign task manifest and the custom skopeo task:
 ```console
 kubectl apply -f hands-on/tekton/cosign-custom.yaml && kubectl apply -f hands-on/tekton/skopeo-custom-task.yaml
 
-task.tekton.dev/cosign created
 ```  
 
 Finally, we need to apply the manifest of another custom task that we will inspect in detail in the final part of this workshop:

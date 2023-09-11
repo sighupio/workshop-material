@@ -1,4 +1,3 @@
-# WebGoat is a deliberately insecure application that allows interested developers just like you to test vulnerabilities commonly found in Java-based applications that use common and popular open source components.
 apiVersion: v1
 kind: Pod
 metadata:
@@ -6,4 +5,4 @@ metadata:
 spec:
   containers:
     - name: vulnerable-container
-      image: webgoat/webgoat-8.0:latest
+      image: httpd:2.4.41

@@ -27,6 +27,6 @@ spec:
     spec:
       containers:
         - name: exposed-api-container
-          image: <your-api-image:version>
+          image: httpd:2.4.57
           ports:
             - containerPort: 8080

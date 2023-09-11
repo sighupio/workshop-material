@@ -14,25 +14,23 @@ Let's look at an example of creating a secret to store a database password.
 kubectl create secret generic db-secret --from-literal=password=secretpassword
 ```
 
-
-### Using a manifest file (`db-secret.yaml`)
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: db-secret
-type: Opaque
-data:
-  password: c2VjcmV0cGFzc3dvcmQ=  # base64-encoded "secretpassword"
-```
-
-
-
 To create the secret from the manifest file:
 
 ```bash
-kubectl apply -f db-secret.yaml
+kubectl create -f ./k8s/db-secret.yaml
+```
+
+
+You can also check the content by running:
+
+```bash
+kubectl get secret db-secret -o jsonpath='{.data.password}'
+```
+
+Or even decode the base64:
+
+```bash
+kubectl get secret db-secret -o jsonpath='{.data.password}' | base64 --decode
 ```
 
 
@@ -44,37 +42,6 @@ To update a secret in Kubernetes, you can use the `kubectl` command-line tool or
 
 ```bash
 kubectl create secret generic db-secret --from-literal=password=newpassword --dry-run=client -o yaml | kubectl apply -f -
-```
-
-
-### Updating the manifest file (`db-secret.yaml`):
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: db-secret
-type: Opaque
-data:
-  password: bmV3cGFzc3dvcmQ=  # base64-encoded "newpassword"
-```
-
-To update the secret from the modified manifest file:
-
-```bash
-kubectl apply -f db-secret.yaml
-```
-
-## Retrieving a Secret
-
-To retrieve a secret in Kubernetes, you can use the `kubectl` command-line tool or access the secret within a pod.
-
-### Using `kubectl`
-
-```bash
-kubectl get secret db-secret
-kubectl get secret db-secret -o yaml
-kubectl get secret db-secret -o json
 ```
 
 ### Accessing the secret within a pod
@@ -98,11 +65,13 @@ spec:
 
 In the example above, the secret `db-secret` is accessed by setting the environment variable `DB_PASSWORD` with the value of the `password` key in the secret.  
 Apply the previous manifest:  
+
 ```bash
 kubectl apply -f hands-on/k8s/pod-with-secret.yaml
 ```  
 
 Once the pod is up and running, retrieve the secret from the pod environment variables:  
+
 ```bash
 kubectl exec -it secret-access-pod -- env | grep DB_PASSWORD
 
@@ -135,6 +104,10 @@ Sealed Secrets work as follows:
 3. The Sealed Secrets controller, running in the cluster, is responsible for decrypting the sealed secrets and creating the actual secrets.  
 
 Using Sealed Secrets provides an extra layer of security by encrypting secrets using public-key cryptography, eliminating the need for direct access to the unencrypted secret data.  
+
+## TODO
+
+Insert a section with exercises with Conjur Secret retrieve.
 ## Conclusion
 
 Securing secrets in Kubernetes is crucial for maintaining the integrity and confidentiality of sensitive information.  

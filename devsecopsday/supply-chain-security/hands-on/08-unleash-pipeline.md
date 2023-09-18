@@ -4,7 +4,7 @@ We are almost ready to launch our pipeline.
 Create tekton `pipeline` and `pipelinerun` resources (this will automatically start the pipeline run):  
 > **Note**
 > In order to push and pull from SIGHUP registry you need the credentials.  
-> If you want to try this at home use your own registry 😁  
+> If you want to try this at home use your own registry 😁 (for example you can use the free plan of [Docker Hub](https://hub.docker.com)  
 
 Create the `hands-on/tekton/registry_credentials.yaml` file with this structure:
 

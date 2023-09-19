@@ -16,7 +16,7 @@ The *Oxford Dictionary* defines supply chain as:
 This definition also applies to **digital supply chain** (or **software supply chain**)  
 i.e. the supply chain that concerns digital artifacts (the present workshop applies to this specific form of supply chain).
 
-**Supply chain security** refers to all the activities and controls that aim to enhance the security of the supply chain (a.k.a. *value chain*).  
+**Supply chain security** refers to all the activities and controls that aim to enhance the security of the supply chain.  
 
 ## Are pipeline and supply chain the same thing ?
 Even if these two terms are often used interchangeably, they do not point to the same thing.

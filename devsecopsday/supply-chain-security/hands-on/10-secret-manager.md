@@ -20,7 +20,7 @@ another to authenticate to an OCI image registry, yet another to authenticate to
 ![secret-manager-schema](images/secret-manager-schema.png)
 
 > **Note**
-> The following step is optional and requires the user to have both access to SIGHUP Conjur instance and a Conjur API KEY.
+> The following step is optional and requires the user to have both access to SIGHUP Conjur instance (or a private one) and a Conjur API KEY.
 
 We've added a simple tekton task that demonstrates reading a secret from a remote secret manager ([**Cyberark's Conjur**](https://www.conjur.org/) in this case).  
 To launch it you need the `hands-on/tekton/conjur_api_key.txt` file, containing the conjur rest api key.  

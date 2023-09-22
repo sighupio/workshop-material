@@ -108,6 +108,8 @@ Verify that the access controls are working as expected. For example, try listin
 kubectl auth can-i list pods -n my-namespace --as user1
 ```  
 
+What happens if you try the same thing but for the `default` namespace?  
+
 ## Creating and Managing ServiceAccounts
 
 ### **Step 1:** Understanding the Role of ServiceAccounts

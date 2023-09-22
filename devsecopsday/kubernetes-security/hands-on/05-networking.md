@@ -65,12 +65,11 @@ Create a YAML manifest file named block-egress-traffic.yaml with the following c
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: block-egress-traffic
+  name: default-deny-egress
 spec:
   podSelector: {}
-  egress:
-    - to:
-        - podSelector: {}
+  policyTypes:
+  - Egress
 
 ```
 

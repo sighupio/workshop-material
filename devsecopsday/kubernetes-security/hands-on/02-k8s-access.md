@@ -6,7 +6,7 @@ You should have received an email containing all the information that will be al
 
 ### Accessing the cluster
 
-In order to access the cluster, you need to have a `ssh` client installed on your machine.
+If you are following the workshop on-site, in order to access the cluster, you need to have a `ssh` client installed on your machine.
 Node: For windows something like puTTY should do the job.
 
 Once you have everything installed/ready you can connect to the cluster master node via the following command:

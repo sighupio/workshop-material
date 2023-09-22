@@ -26,7 +26,7 @@ This tutorial assumes some basic prerequisite, you need:
 
 ## Requirements
 
-In order to procede with the tutorial, you need the following tools:  
+In order to procede with the tutorial in a local environment, you need the following tools:  
 - [Docker](https://www.docker.com/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)

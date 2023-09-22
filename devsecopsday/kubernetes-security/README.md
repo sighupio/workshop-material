@@ -14,22 +14,16 @@ This repository will contain a list of hands-on exercises in order to follow alo
 
 ___
 
-### Prerequisites
-
-This tutorial assumes some basic prerequisite, you need:
-
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/)
-- [Helm](https://helm.sh/docs/intro/install/)
-
 
 
 ## Requirements
 
 In order to procede with the tutorial in a local environment, you need the following tools:  
+
 - [Docker](https://www.docker.com/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Helm](https://helm.sh/docs/intro/install/)
 
 
 

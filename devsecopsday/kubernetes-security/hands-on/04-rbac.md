@@ -214,6 +214,8 @@ To utilize the created ServiceAccount within a pod:
     ```  
 
     Output:
+    <details>
+    <summary><b>Click to expand!</b></summary>
 
     ```json
     {
@@ -495,7 +497,9 @@ To utilize the created ServiceAccount within a pod:
         }
       ]
     }
-    ```
+    ```  
+    </details>
+    <br/>
 
 This command retrieves a list of pods in the default namespace using the token provided by the ServiceAccount.  
 

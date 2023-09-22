@@ -14,7 +14,7 @@ kubectl config current-context
 kubectl config view --minify --output 'jsonpath={..user}'
 ```  
 
-The first command retrieves the current context name, and the second command retrieves the current user associated with that context.
+The first command retrieves the current context name, and the second command retrieves the current user (`client-certificate` & `client-key` tuple) associated with that context.
 >In Kubernetes, a context is a combination of cluster, user, and namespace settings that determines the target for the current Kubernetes configuration. It provides a way to switch between different Kubernetes clusters and user identities easily.
 
 Kubeconfig example:

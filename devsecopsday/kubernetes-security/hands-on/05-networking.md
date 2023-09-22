@@ -1,5 +1,12 @@
 # Networking
 
+First of all we will install [Calico CNI](https://github.com/projectcalico/calico) (this can take a few minutes):  
+```bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+```   
+
+
+
 Apply the manifest to create the deployment and service:  
 
 ```bash
@@ -48,14 +55,14 @@ spec:
               app: allowed-app
 ```
 
-This example Network Policy allows traffic to the pods labeled with app: sample-app from pods labeled with app: allowed-app.  
+This example Network Policy allows traffic to the pods labeled with `app: sample-app` from pods labeled with `app: allowed-app`.  
 Apply the Network Policy to the default namespace:
 
 ```bash
 kubectl apply -f hands-on/k8s/basic-network-policy.yaml -n default
 ```
 
-The Network Policy is applied, and traffic will be allowed only from pods labeled as app: allowed-app to pods labeled as app: sample-app.  
+The Network Policy is applied, and traffic will be allowed only from pods labeled as `app: allowed-app` to pods labeled as `app: sample-app`.  
 Example of Network Policy to Block Cluster Egress Traffic:  
 
 Create a YAML manifest file named block-egress-traffic.yaml with the following content:

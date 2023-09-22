@@ -195,7 +195,7 @@ To utilize the created ServiceAccount within a pod:
     Apply the previous manifest:
 
     ```bash
-    kubectl apply -f hands-on/k8s/pod.yaml
+    kubectl apply -f hands-on/k8s/pod-nginx.yaml
     ```  
 
 

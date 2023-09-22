@@ -19,7 +19,15 @@ Or connect to a worker node:
 
 ```bash
 ssh -l workshop -i name.surname@sighup.io.key -o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p -q -i name.surname@sighup.io.key -l workshop <master-node-ip>" 
-```
+```  
+
+If you want to spin up a local cluster, use the following command:  
+```bash
+minikube start --driver=docker --network-plugin=cni --cni=calico --profile k8s-security-cluster --memory 8192 --cpus 4
+```  
+
+
+
 
 Once connected you can try a `kubectl` command like:
 

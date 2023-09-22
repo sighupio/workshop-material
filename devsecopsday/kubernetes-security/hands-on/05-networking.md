@@ -1,11 +1,5 @@
 # Networking
 
-First of all we will install [Calico CNI](https://github.com/projectcalico/calico) (this can take a few minutes):  
-```bash
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-```   
-
-
 
 Apply the manifest to create the deployment and service:  
 
@@ -158,16 +152,11 @@ Create a new pod for testing:
 kubectl run test-pod --image=nginx
 ```
 
-Access the shell of the test-pod (once the pod is up and running):
+Access the shell of the test-pod (once the pod is up and running) and try to call an external url (nn this case one of the google servers):
+
 
 ```bash
-kubectl exec -it test-pod -- /bin/bash
-```
-
-From the shell of the test-pod, try to access an external URL (in this case one of google DNS servers):
-
-```bash
-curl --max-time 10 216.58.204.142
+kubectl exec -it test-pod -- /bin/bash -c "curl --max-time 10 216.58.204.142"
 ```
 
 This request will time out, indicating that the policy to block egress traffic is working:

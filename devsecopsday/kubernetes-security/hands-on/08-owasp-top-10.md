@@ -120,7 +120,7 @@ Learn how to secure Kubernetes API endpoints and manage sensitive information (s
 Apply the manifest:
 
 ```bash
-kubectl apply -f ./k8s/exposed-api.yaml
+kubectl apply -f hands-on/k8s/exposed-api.yaml
 ```
 
 2. **Identify exposed APIs using kube-hunter:**
@@ -137,7 +137,7 @@ kubectl run kube-hunter --image=aquasec/kube-hunter
 Apply the manifest:
 
 ```bash
-kubectl apply -f ./k8s/api-rbac.yaml
+kubectl apply -f hands-on/k8s/api-rbac.yaml
 ```
 
 2. **Secure the API's deployment manifest by adding a `serviceAccountName` field:**
@@ -158,5 +158,5 @@ spec:
 
 Apply the updated manifest:
 ```bash
-kubectl apply -f ./k8s/exposed-api.yaml
+kubectl apply -f hands-on/k8s/exposed-api.yaml
 ```

@@ -182,7 +182,7 @@ spec:
       serviceAccountName: api-service-account
       containers:
         - name: exposed-api-container
-          image: httpd:2.4.57
+          image: httpd:2.4.57-alpine3.18
           ports:
             - containerPort: 8080
 ```

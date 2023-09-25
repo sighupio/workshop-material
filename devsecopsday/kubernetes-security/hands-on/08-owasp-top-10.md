@@ -98,7 +98,7 @@ spec:
 
 2. **Redeploy the pod with the updated image:**
 ```bash
-kubectl apply -f ./k8s/vulnerable-pod.yaml
+kubectl apply -f hands-on/k8s/vulnerable-pod.yaml
 ```
 
 3. **Verify that the pod is now using the secure image:**

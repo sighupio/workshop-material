@@ -81,7 +81,7 @@ Total: 1 (CRITICAL: 1)
 └────────────────┴────────────────┴──────────┴──────────┴───────────────────┴───────────────┴────────────────────────────────────────────┘
 ```
 
-I'd say **NOT BAD**. We went from **46 CRITICAL** vulnerabilities to only 1.
+I'd say **NOT BAD**. We went from **46 CRITICAL** vulnerabilities to "only" 1.
 
 We can now update the manifest with the new image:
 

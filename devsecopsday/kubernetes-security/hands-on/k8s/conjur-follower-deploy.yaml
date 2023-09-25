@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: conjur-follower
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conjur-follower
+  namespace: conjur-follower
+  labels:
+    app: conjur-follower
+spec:
+  ports:
+  - port: 443
+    name: https
+  selector:
+    app: conjur-follower
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conjur-follower
+  namespace: conjur-follower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conjur-follower
+  template:
+    metadata:
+      labels:
+        app: conjur-follower
+        name: conjur-follower
+        role: follower
+    spec:
+      serviceAccountName: authn-k8s-sa
+      volumes:
+      - name: seedfile
+        emptyDir:
+          medium: Memory
+      - name: conjur-token
+        emptyDir:
+          medium: Memory
+      initContainers:
+      - name: authenticator
+        image: registry.sighup.io/workshop/dap-seedfetcher:0.6.2
+        imagePullPolicy: Always
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: FOLLOWER_HOSTNAME
+            value: conjur-follower
+          - name: SEEDFILE_DIR
+            value: /tmp/seedfile
+          - name: CONJUR_AUTHN_LOGIN
+            value: host/k8s-follower
+        envFrom:
+          - configMapRef:
+              name: follower-cm
+        volumeMounts:
+          - name: seedfile
+            mountPath: /tmp/seedfile
+          - name: conjur-token
+            mountPath: /run/conjur
+      containers:
+      - name: conjur-appliance
+        image: registry.sighup.io/workshop/conjur-appliance:13.0.4
+        command: ["/tmp/seedfile/start-follower.sh"]
+        imagePullPolicy: Always
+        env:
+          - name: SEEDFILE_DIR
+            value: /tmp/seedfile
+          - name: CONJUR_AUTHENTICATORS
+            value: authn-k8s/dev-cluster
+        ports:
+        - containerPort: 443
+          name: https
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 443
+            scheme: HTTPS
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        volumeMounts:
+          - name: seedfile
+            mountPath: /tmp/seedfile
+            readOnly: true

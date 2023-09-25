@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-app
+
+---
+apiVersion: v1
+data:
+  ssl-certificate: |
+    # conjur.pem content
+kind: ConfigMap
+metadata:
+  name: demo-app-cm
+  namespace: demo-app
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+  namespace: demo-app
+spec:
+  selector:
+    app: demo-app
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app-deployment
+  namespace: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+        - name: demo-app-container
+          image: registry.sighup.io/workshop/demo-app:1.0.5
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DBAddress
+              value: demo-app-db
+          envFrom:
+          - configMapRef:
+              name: demo-app-cm
+          volumeMounts:
+          - mountPath: /run/conjur
+            name: conjur-access-token
+            readOnly: true
+          command: [ "summon", "-f", "/etc/secrets.yml", "ruby", "/usr/src/cityapp_fromenv.rb", "-o", "0.0.0.0" ]
+
+        - image: registry.sighup.io/workshop/conjur-authn-k8s-client:0.25.0
+          imagePullPolicy: IfNotPresent
+          name: authenticator
+          env:
+            - name: CONJUR_AUTHN_LOGIN
+              value: host/<PLACEHOLDER>/demo-app
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            - configMapRef:
+                name: demo-app-cm
+          volumeMounts:
+            - mountPath: /run/conjur
+              name: conjur-access-token
+      volumes:
+        - name: conjur-access-token
+          emptyDir:
+            medium: Memory

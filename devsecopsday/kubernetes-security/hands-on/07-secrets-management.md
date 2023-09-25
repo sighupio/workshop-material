@@ -105,9 +105,196 @@ Sealed Secrets work as follows:
 
 Using Sealed Secrets provides an extra layer of security by encrypting secrets using public-key cryptography, eliminating the need for direct access to the unencrypted secret data.  
 
-## TODO
+## CyberArk Conjur
 
-Insert a section with exercises with Conjur Secret retrieve.
+### Deploy a Conjur Follower
+
+1. Retrieve the Conjur Cluster certificate and deploy a ConfigMap containing the certicate.
+
+```bash
+openssl s_client -showcerts -connect conjur-lb.example.com:443 < /dev/null 2> /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > conjur.pem
+```
+
+Deploy the ConfigMap:
+
+```yaml
+apiVersion: v1
+data:
+  ssl-certificate: |
+    # conjur.pem content
+kind: ConfigMap
+metadata:
+  name: conjur-cm
+  namespace: cyberark-conjur
+
+```
+
+2. Link the ClusterRole with the ServiceAccount (already deployed)
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: conjur-authn-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "serviceaccounts"]
+  verbs: ["get", "list"]
+- apiGroups: ["extensions"]
+  resources: [ "deployments", "replicasets"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: [ "deployments", "statefulsets", "replicasets"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create", "get"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: conjur-authn-rolebinding
+  namespace: pg-cyberark-dap
+subjects:
+- kind: ServiceAccount
+  name: authn-k8s-sa
+  namespace: pg-cyberark-dap
+roleRef:
+  kind: ClusterRole
+  name: conjur-authn-role
+  apiGroup: rbac.authorization.k8s.io
+```
+
+3. Deploy the Conjur Follower
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: conjur-follower
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conjur-follower
+  namespace: conjur-follower
+  labels:
+    app: conjur-follower
+spec:
+  ports:
+  - port: 443
+    name: https
+  selector:
+    app: conjur-follower
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conjur-follower
+  namespace: conjur-follower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conjur-follower
+  template:
+    metadata:
+      labels:
+        app: conjur-follower
+        name: conjur-follower
+        role: follower
+    spec:
+      serviceAccountName: authn-k8s-sa
+      volumes:
+      - name: seedfile
+        emptyDir:
+          medium: Memory
+      - name: conjur-token
+        emptyDir:
+          medium: Memory
+      initContainers:
+      - name: authenticator
+        image: registry.sighup.io/workshop/dap-seedfetcher:0.6.2
+        imagePullPolicy: Always
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: FOLLOWER_HOSTNAME
+            value: conjur-follower
+          - name: SEEDFILE_DIR
+            value: /tmp/seedfile
+          - name: CONJUR_AUTHN_LOGIN
+            value: host/k8s-follower
+        envFrom:
+          - configMapRef:
+              name: follower-cm
+        volumeMounts:
+          - name: seedfile
+            mountPath: /tmp/seedfile
+          - name: conjur-token
+            mountPath: /run/conjur
+      containers:
+      - name: conjur-appliance
+        image: registry.sighup.io/workshop/conjur-appliance:13.0.4
+        command: ["/tmp/seedfile/start-follower.sh"]
+        imagePullPolicy: Always
+        env:
+          - name: SEEDFILE_DIR
+            value: /tmp/seedfile
+          - name: CONJUR_AUTHENTICATORS
+            value: authn-k8s/dev-cluster
+        ports:
+        - containerPort: 443
+          name: https
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 443
+            scheme: HTTPS
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        volumeMounts:
+          - name: seedfile
+            mountPath: /tmp/seedfile
+            readOnly: true
+```
+
+5. Deploy a demo-app
+
+```bash
+export CONJUR_SSL_CERTIFICATE=conjur.pem
+export CONJUR_AUTHN_TOKEN_FILE=/run/conjur/access-token
+export CONJUR_APPLIANCE_URL=https://$conjurdns
+export CONJUR_AUTHN_URL=$CONJUR_APPLIANCE_URL/authn-k8s/PLACEHOLDER
+export CONJUR_ACCOUNT=$(curl -k $CONJUR_APPLIANCE_URL/info | jq -r '.configuration.conjur.account')
+```
+
+```bash
+kubectl create configmap demo-app-cm -n demo-app \
+  -o yaml \
+  --dry-run \
+  --from-literal CONJUR_ACCOUNT=${CONJUR_ACCOUNT} \
+  --from-literal CONJUR_AUTHN_TOKEN_FILE=${CONJUR_AUTHN_TOKEN_FILE} \
+  --from-literal CONJUR_APPLIANCE_URL=${CONJUR_APPLIANCE_URL} \
+  --from-literal CONJUR_AUTHN_URL=${CONJUR_AUTHN_URL} \
+  --from-file "CONJUR_SSL_CERTIFICATE=${CONJUR_SSL_CERTIFICATE}" | kubectl apply -f -
+```
+
+Deploy the demo-app:
+
+```bash
+kubectl apply -f hands-on/demo-app-conjur.yaml
+```
+
 ## Conclusion
 
 Securing secrets in Kubernetes is crucial for maintaining the integrity and confidentiality of sensitive information.  

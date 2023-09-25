@@ -7,9 +7,8 @@ Learn how to secure container images and prevent common vulnerabilities in Kuber
 
 ### Task 1: Identify Vulnerable Images
 
-1. **Deploy a Kubernetes Pod using a vulnerable container image:**
+1. **Deploy a Kubernetes Pod using a vulnerable container image by applying the following manifest:**  
 
-Apply the manifest:
 
 ```yaml
 apiVersion: v1
@@ -20,53 +19,60 @@ spec:
   containers:
     - name: vulnerable-container
       image: httpd:2.4.41
-```
+```  
+
 
 ```bash
 kubectl apply -f hands-on/k8s/vulnerable-pod.yaml
-```
+```  
 
-We are using `httpd:2.4.41` because we know it has lots of known vulnerabilities.
 
-2. **Verify that the pod is running:**
+We are using `httpd:2.4.41` because we know it has lots of known vulnerabilities.  
+
+
+1. **Verify that the pod is running:**  
+
 
 ```bash
 kubectl get pods
-```
+```  
+
 
 ### Task 2: Implement Image Scanning
 
-1. **Install Trivy in your machine:**
+1. **Install Trivy in your machine:**  
+
 
 ```bash
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.45.0
-```
+```  
 
-2. **Scan the vulnerable image:**
 
-```bash
-trivy image httpd:2.4.41
-```
+2. **Scan the vulnerable image for CRITICAL vulnerabilities:**  
 
-**Note**: This command's output may be a little too long, if you want to filter only CRITICAL vulnerabilities you can use the flag `-s CRITICAL`
 
 ```bash
 trivy image httpd:2.4.41 -s CRITICAL
-```
+```  
 
-3. **Take a look at the vulnerabilities found and their potential impacts.**
+
+3. **Take a look at the vulnerabilities found and their potential impacts.**  
+
 
 ### Task 3: Remediate Vulnerabilities
 
-1. **Update the vulnerable container image in `vulnerable-pod.yaml` to a secure version.**
+1. **Update the vulnerable container image in `vulnerable-pod.yaml` to a secure version.**  
 
-Before updating we want to do a scan on a newer version of `httpd` to see how many vulnerability are fixed and how many are still present.
+
+Before updating we want to do a scan on a newer version of `httpd` to see how many vulnerability are fixed and how many are still present.  
+
 
 ```bash
 trivy image httpd:2.4.57 -s CRITICAL
-```
+```  
 
-The output should be something like this:
+
+The output should be something like this:  
 
 ```console
 httpd:2.4.57 (debian 12.1)
@@ -79,9 +85,34 @@ Total: 1 (CRITICAL: 1)
 │ linux-libc-dev │ CVE-2023-25775 │ CRITICAL │ affected │ 6.1.38-4          │               │ Improper access control                    │
 │                │                │          │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-25775 │
 └────────────────┴────────────────┴──────────┴──────────┴───────────────────┴───────────────┴────────────────────────────────────────────┘
-```
+```  
 
-I'd say **NOT BAD**. We went from **46 CRITICAL** vulnerabilities to "only" 1.
+
+**NOT BAD**: we went from **46 CRITICAL** vulnerabilities to "only" 1.  
+
+Can we improve the current situation both in terms of vulnerabilities and image size?  
+Of course we can!  
+
+```bash
+trivy image httpd:2.4.57-alpine3.18  -s CRITICAL
+```  
+
+The output should be something like this:
+
+```console
+httpd:2.4.57-alpine3.18 (alpine 3.18.3)
+
+Total: 0 (CRITICAL: 0)
+```  
+By employing the Alpine-based image, we successfully eliminated all known critical vulnerabilities, and concurrently achieved a significant reduction in image size:  
+```console
+httpd     2.4.57                  359570977af2   5 days ago     168MB
+httpd     2.4.41                  c5a012f9cf45   3 years ago    165MB
+httpd     2.4.57-alpine3.18       747d075b9311   6 weeks ago    59.1MB
+```  
+
+As you can see our latest image size is almost 1/3 of the previous two!  
+
 
 We can now update the manifest with the new image:
 
@@ -93,15 +124,15 @@ metadata:
 spec:
   containers:
     - name: vulnerable-container
-      image: httpd:2.4.57
+      image: httpd:2.4.57-alpine3.18
 ```
 
-2. **Redeploy the pod with the updated image:**
+1. **Redeploy the pod with the updated image:**
 ```bash
 kubectl apply -f hands-on/k8s/vulnerable-pod.yaml
 ```
 
-3. **Verify that the pod is now using the secure image:**
+1. **Verify that the pod is now using the secure image:**
 ```bash
 kubectl get pods
 ```

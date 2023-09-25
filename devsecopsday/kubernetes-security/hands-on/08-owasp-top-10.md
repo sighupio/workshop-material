@@ -23,7 +23,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f ./k8s/vulnerable-pod.yaml
+kubectl apply -f hands-on/k8s/vulnerable-pod.yaml
 ```
 
 We are using `httpd:2.4.41` because we know it has lots of known vulnerabilities.

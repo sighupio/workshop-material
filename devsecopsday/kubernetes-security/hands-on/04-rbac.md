@@ -181,15 +181,17 @@ To utilize the created ServiceAccount within a pod:
 1. Define the `serviceAccountName` field in the pod's specification. For example, modify an existing pod's YAML file as follows:
 
     ```yaml
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: my-pod
-    spec:
-      serviceAccountName: my-serviceaccount
-      containers:
-      - name: my-container
-        image: my-image
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: my-pod
+      spec:
+        serviceAccountName: my-serviceaccount
+        containers:
+        - name: my-container
+          image: nginx:latest
+          ports:
+          - containerPort: 80
     ```
 
     Apply the previous manifest:

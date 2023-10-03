@@ -5,9 +5,9 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: sample-app
-  ingress:
-    - from:
+      app: allowed-app
+  egress:
+    - to:
         - podSelector:
             matchLabels:
-              app: allowed-app
+              app: sample-app

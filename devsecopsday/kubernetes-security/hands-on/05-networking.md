@@ -41,12 +41,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: sample-app
-  ingress:
-    - from:
+      app: allowed-app
+  egress:
+    - to:
         - podSelector:
             matchLabels:
-              app: allowed-app
+              app: sample-app
 ```
 
 This example Network Policy allows traffic to the pods labeled with `app: sample-app` from pods labeled with `app: allowed-app`.  
@@ -81,7 +81,8 @@ Apply the Network Policy to the default namespace:
 kubectl apply -f hands-on/k8s/block-egress-traffic.yaml -n default
 ```  
 
-Testing Network Policies  
+## Testing Network Policies
+
 Test the basic network policy for pod traffic control:
 
 Create a new pod labeled as app: allowed-app:

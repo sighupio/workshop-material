@@ -152,11 +152,10 @@ Create a new pod for testing:
 kubectl run test-pod --image=nginx
 ```
 
-Access the shell of the test-pod (once the pod is up and running) and try to call an external url (nn this case one of the google servers):
-
+Access the shell of the test-pod (once the pod is up and running) and try to call an external url (in this case one of CloudFlare DNS Servers):
 
 ```bash
-kubectl exec -it test-pod -- /bin/bash -c "curl --max-time 10 216.58.204.142"
+kubectl exec -it test-pod -- /bin/bash -c "curl --max-time 10 1.1.1.1"
 ```
 
 This request will time out, indicating that the policy to block egress traffic is working:

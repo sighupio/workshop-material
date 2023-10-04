@@ -42,14 +42,17 @@ kubectl get pods
 
 1. **Install Trivy in your machine:**  
 
-
 ```bash
-curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.45.0
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /home/workshop v0.45.0
 ```  
 
+Add `/home/workshop` to `$PATH`
+
+```bash
+export PATH=$PATH:/home/workshop
+```
 
 2. **Scan the vulnerable image for CRITICAL vulnerabilities:**  
-
 
 ```bash
 trivy image httpd:2.4.41 -s CRITICAL

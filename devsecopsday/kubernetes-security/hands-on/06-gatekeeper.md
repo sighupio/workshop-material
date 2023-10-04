@@ -159,4 +159,4 @@ Congratulations! You have successfully `(almost)` secured a Kubernetes cluster u
 
 >Remember to follow security best practices and regularly update and review your policies to maintain a secure Kubernetes environment.
 
-Continue to [Secrets management](08-secrets-management.md)
+Continue to [Secrets management](07-secrets-management.md)

@@ -5,16 +5,6 @@ metadata:
 
 ---
 apiVersion: v1
-data:
-  ssl-certificate: |
-    # conjur.pem content
-kind: ConfigMap
-metadata:
-  name: demo-app-cm
-  namespace: demo-app
-
----
-apiVersion: v1
 kind: Service
 metadata:
   name: demo-app
@@ -47,7 +37,7 @@ spec:
     spec:
       containers:
         - name: demo-app-container
-          image: registry.sighup.io/workshop/demo-app:1.0.5
+          image: registry.sighup.io/workshop/demo-app-db:1.0.5
           ports:
             - containerPort: 8080
           env:
@@ -67,7 +57,7 @@ spec:
           name: authenticator
           env:
             - name: CONJUR_AUTHN_LOGIN
-              value: host/<PLACEHOLDER>/demo-app
+              value: host/projects/demo-app/workshop/demo-app
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -86,3 +76,49 @@ spec:
         - name: conjur-access-token
           emptyDir:
             medium: Memory
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app-db
+  namespace: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: registry.sighup.io/workshop/demo-app-db:1.0.5
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_password
+            - name: MYSQL_DATABASE
+              value: mydb
+            - name: MYSQL_USER
+              value: db_user
+            - name: MYSQL_PASSWORD
+              value: 53cr3tP455w0rD!&
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app-db
+  namespace: demo-app
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP

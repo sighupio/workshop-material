@@ -62,10 +62,12 @@ spec:
           - name: SEEDFILE_DIR
             value: /tmp/seedfile
           - name: CONJUR_AUTHN_LOGIN
-            value: host/k8s-follower
-        envFrom:
-          - configMapRef:
-              name: follower-cm
+            value: host/conjur/authn-k8s/conjur-follower-workshop-<namesurname>/apps/seed-fetcher-app
+          - name: CONJUR_SSL_CERTIFICATE
+            valueFrom:
+              configMapKeyRef:
+                name: conjur-cm
+                key: ssl-certificate
         volumeMounts:
           - name: seedfile
             mountPath: /tmp/seedfile
@@ -80,7 +82,7 @@ spec:
           - name: SEEDFILE_DIR
             value: /tmp/seedfile
           - name: CONJUR_AUTHENTICATORS
-            value: authn-k8s/dev-cluster
+            value: authn-k8s/conjur-follower-workshop-<namesurname>
         ports:
         - containerPort: 443
           name: https

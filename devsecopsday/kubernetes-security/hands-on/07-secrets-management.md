@@ -124,21 +124,34 @@ export clustername=conjur-follower-workshop-<namesurname>
 openssl s_client -showcerts -connect $conjurdns:443 < /dev/null 2> /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > conjur.pem
 ```
 
-Deploy the ConfigMap:
+Create a ConfigMap containing the certificate:
 
-```yaml
-apiVersion: v1
-data:
-  ssl-certificate: |
-    # conjur.pem content
-kind: ConfigMap
-metadata:
-  name: conjur-cm
-  namespace: cyberark-conjur
 
+```bash
+export CONJUR_SSL_CERTIFICATE=conjur.pem
+export CONJUR_APPLIANCE_URL=https://${conjurdns}
+export CONJUR_AUTHN_URL=$CONJUR_APPLIANCE_URL/authn-k8s/${clustername}
+export AUTHENTICATOR_ID=$clustername
+export CONJUR_ACCOUNT=default
+export CONJUR_SEED_FILE_URL=$CONJUR_APPLIANCE_URL/configuration/$CONJUR_ACCOUNT/seed/follower
+
+kubectl create configmap follower-cm -n conjur-follower \
+  --from-literal CONJUR_ACCOUNT=${CONJUR_ACCOUNT} \
+  --from-literal AUTHENTICATOR_ID=${AUTHENTICATOR_ID} \
+  --from-literal CONJUR_APPLIANCE_URL=${CONJUR_APPLIANCE_URL} \
+  --from-literal CONJUR_SEED_FILE_URL=${CONJUR_SEED_FILE_URL} \
+  --from-literal CONJUR_AUTHN_URL=${CONJUR_AUTHN_URL} \
+  --from-file "CONJUR_SSL_CERTIFICATE=${CONJUR_SSL_CERTIFICATE}"
 ```
 
-2. Link the ClusterRole with the ServiceAccount (already deployed)
+Deploy the ServiceAccount:
+
+
+```bash
+kubectl create serviceaccount authn-k8s-sa
+```
+
+2. Link the ClusterRole with the ServiceAccount 
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -195,35 +208,33 @@ Complete the onboarding procedure by populating the authenticator variables on C
 Install Conjur CLI:
 
 ```bash
-pip install conjur
+wget https://github.com/cyberark/cyberark-conjur-cli/releases/download/v7.1.0/conjur-cli-rhel-7.tar.gz
+tar -xvf conjur-cli-rhel-7.tar.gz
+sudo chmod +x conjur
+sudo cp conjur /usr/local/bin
 ```
 
 Login to Conjur:
 
 ```bash
-conjur init -s --url https://ec2-54-216-156-83.eu-west-1.compute.amazonaws.com && conjur -i admin -p PasswordSighup02!
+conjur init -s --url https://ec2-54-216-156-83.eu-west-1.compute.amazonaws.com && conjur login -i admin -p PasswordSighup02!
 ```
 
 Populate the variables:
 
 ```bash
-export TOKEN_SECRET_NAME="$(kubectl get secrets -n cyberark-conjur \
-| grep 'authn-k8s-sa.*service-account-token' \
-| head -n1 \
-| awk '{print $1}')"
+kubectl create token authn-k8s-sa > sa_token.txt
 
-kubectl get secret $TOKEN_SECRET_NAME -n cyberark-conjur \
---output='go-template={{ .data.token }}' \
-| base64 -D > sa_token.txt
+kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' | base64 --decode > ca.crt
 
 kubectl config view --raw --minify --flatten \
---output='jsonpath={.clusters[].cluster.server}' > k8_api_url.txt
+--output='jsonpath={.clusters[].cluster.server}' > k8s_api_url.txt
 
-conjur variable values add conjur/authn-k8s/${clustername}/kubernetes/ca-cert "$(cat conjur.pem)"
+conjur variable set -i conjur/authn-k8s/${clustername}/kubernetes/ca-cert -v "$(cat ca.crt)"
 
-conjur variable values add conjur/authn-k8s/${clustername}/kubernetes/service-account-token "$(cat sa_token.txt)"
+conjur variable set -i conjur/authn-k8s/${clustername}/kubernetes/service-account-token -v "$(cat sa_token.txt)"
 
-conjur variable values add conjur/authn-k8s/${clustername}/kubernetes/api-url "$(cat k8_api_url.txt)"
+conjur variable set -i conjur/authn-k8s/${clustername}/kubernetes/api-url -v "$(cat k8s_api_url.txt)"
 
 ```
 
@@ -239,7 +250,7 @@ export CONJUR_SSL_CERTIFICATE=conjur.pem
 export CONJUR_AUTHN_TOKEN_FILE=/run/conjur/access-token
 export CONJUR_APPLIANCE_URL=https://${conjurdns}
 export CONJUR_AUTHN_URL=$CONJUR_APPLIANCE_URL/authn-k8s/${clustername}
-export CONJUR_ACCOUNT=$(curl -k $CONJUR_APPLIANCE_URL/info | jq -r '.configuration.conjur.account')
+export CONJUR_ACCOUNT=default
 ```
 
 ```bash

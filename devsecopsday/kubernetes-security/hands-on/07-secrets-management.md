@@ -124,6 +124,12 @@ export clustername=conjur-follower-workshop-<namesurname>
 openssl s_client -showcerts -connect $conjurdns:443 < /dev/null 2> /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > conjur.pem
 ```
 
+Create a namespace called `conjur-follower`:
+
+```bash
+kubectl create namespace conjur-follower
+```
+
 Create a ConfigMap containing the certificate:
 
 
@@ -148,10 +154,12 @@ Deploy the ServiceAccount:
 
 
 ```bash
-kubectl create serviceaccount authn-k8s-sa
+kubectl create serviceaccount authn-k8s-sa -n conjur-follower
 ```
 
-2. Link the ClusterRole with the ServiceAccount 
+2. Link the ClusterRole with the ServiceAccount:
+
+`kubectl apply -f k8s/conjur-follower-cr-rb.yaml` or:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -173,10 +181,10 @@ rules:
   verbs: ["create", "get"]
 
 ---
-kind: RoleBinding
+kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: conjur-authn-rolebinding
+  name: conjur-authn-clusterrolebinding
   namespace: conjur-follower
 subjects:
 - kind: ServiceAccount
@@ -187,6 +195,7 @@ roleRef:
   name: conjur-authn-role
   apiGroup: rbac.authorization.k8s.io
 ```
+
 
 3. Deploy the Conjur Follower
 
@@ -223,7 +232,7 @@ conjur init -s --url https://ec2-54-216-156-83.eu-west-1.compute.amazonaws.com &
 Populate the variables:
 
 ```bash
-kubectl create token authn-k8s-sa > sa_token.txt
+kubectl create token authn-k8s-sa -n conjur-follower > sa_token.txt
 
 kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' | base64 --decode > ca.crt
 
@@ -238,10 +247,9 @@ conjur variable set -i conjur/authn-k8s/${clustername}/kubernetes/api-url -v "$(
 
 ```
 
-And then deploy it with `kubectl apply -f k8s/conjur-follower-deploy`
+And then deploy it with `kubectl apply -f k8s/conjur-follower-deploy.yaml`
 
 ---
-
 
 5. Deploy a demo-app
 
@@ -255,13 +263,11 @@ export CONJUR_ACCOUNT=default
 
 ```bash
 kubectl create configmap demo-app-cm -n demo-app \
-  -o yaml \
-  --dry-run \
   --from-literal CONJUR_ACCOUNT=${CONJUR_ACCOUNT} \
   --from-literal CONJUR_AUTHN_TOKEN_FILE=${CONJUR_AUTHN_TOKEN_FILE} \
   --from-literal CONJUR_APPLIANCE_URL=${CONJUR_APPLIANCE_URL} \
   --from-literal CONJUR_AUTHN_URL=${CONJUR_AUTHN_URL} \
-  --from-file "CONJUR_SSL_CERTIFICATE=${CONJUR_SSL_CERTIFICATE}" | kubectl apply -f -
+  --from-file "CONJUR_SSL_CERTIFICATE=${CONJUR_SSL_CERTIFICATE}"
 ```
 
 Deploy the demo-app:

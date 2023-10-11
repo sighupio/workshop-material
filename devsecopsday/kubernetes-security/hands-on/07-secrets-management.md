@@ -3,6 +3,10 @@
 Secrets management is a crucial aspect of Kubernetes security.  
 In this workshop, we will explore how to create, update, and retrieve secrets in Kubernetes, as well as discuss the challenges associated with securing secrets and the benefits of using RBAC configurations, secret managers, and sealed secrets.
 
+> **Note**
+> Before creating other namespaces remember to delete the CRDs from the previous exercices (Gatekeeper).  
+
+
 ## Creating a Secret
 
 To create a secret in Kubernetes, you can use the `kubectl` command-line tool or define the secret in a manifest file.  

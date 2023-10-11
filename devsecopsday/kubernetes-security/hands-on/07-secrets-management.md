@@ -292,4 +292,4 @@ you can significantly enhance the security of your Kubernetes cluster and protec
 
 <br/>
 
-Continue to [OWASP Top 10](09-owasp-top-10.md)
+Continue to [OWASP Top 10](08-owasp-top-10.md)

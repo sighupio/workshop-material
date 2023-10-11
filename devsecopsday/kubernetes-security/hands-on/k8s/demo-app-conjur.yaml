@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: demo-app-container
-          image: registry.sighup.io/workshop/demo-app-db:1.0.5
+          image: registry.sighup.io/workshop/demo-app:1.0.5
           ports:
             - containerPort: 8080
           env:

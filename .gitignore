@@ -1,2 +1,8 @@
 pizza-controller
 kubeconfig
+
+# macos
+.DS_Store
+
+# cosign
+cosign.pub

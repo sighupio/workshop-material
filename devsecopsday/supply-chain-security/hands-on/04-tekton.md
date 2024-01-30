@@ -111,5 +111,23 @@ configmap/chains-info created
 configmap/config-logging created
 ```  
 
+Retrieve all the installed Tekton's custom resource definitions:  
+```console
+kubectl get crds
+
+NAME                                       CREATED AT
+clustertasks.tekton.dev                    2024-01-30T13:21:37Z
+customruns.tekton.dev                      2024-01-30T13:21:37Z
+extensions.dashboard.tekton.dev            2024-01-30T13:21:39Z
+pipelineruns.tekton.dev                    2024-01-30T13:21:37Z
+pipelines.tekton.dev                       2024-01-30T13:21:37Z
+resolutionrequests.resolution.tekton.dev   2024-01-30T13:21:37Z
+stepactions.tekton.dev                     2024-01-30T13:21:37Z
+taskruns.tekton.dev                        2024-01-30T13:21:37Z
+tasks.tekton.dev                           2024-01-30T13:21:37Z
+verificationpolicies.tekton.dev            2024-01-30T13:21:37Z
+```  
+
+
 Continue to [Tekton Tasks](05-tekton-tasks.md)
 

@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fine-pod
+  labels:
+    app: fine-pod
+spec:
+  nodeName: <node_name>
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: profiles/fine-grained.json
+  containers:
+  - name: test-container
+    image: hashicorp/http-echo:1.0
+    args:
+    - "-text=just made some syscalls!"
+    securityContext:
+      allowPrivilegeEscalation: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: fine-pod
+spec:
+  selector:
+    app: fine-pod
+  ports:
+  - protocol: TCP
+    port: 5678
+    nodePort: 32322
+  type: NodePort

@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: audit-pod
+  labels:
+    app: audit-pod
+spec:
+  nodeName: <node_name>
+  securityContext:
+    seccompProfile:
+      type: Localhost
+      localhostProfile: profiles/audit.json
+  containers:
+  - name: test-container
+    image: hashicorp/http-echo:1.0
+    args:
+    - "-text=just made some syscalls!"
+    securityContext:
+      allowPrivilegeEscalation: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: audit-pod
+spec:
+  selector:
+    app: audit-pod
+  ports:
+  - protocol: TCP
+    port: 5678
+    nodePort: 32321
+  type: NodePort

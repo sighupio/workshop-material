@@ -5,6 +5,7 @@ In this exercise we learn how to find unwanted processes and how to clean them.
 1. Make the exercise run
 
 ```bash
+sudo su
 chmod +x setup.sh
 ./setup.sh
 ```
@@ -12,7 +13,7 @@ chmod +x setup.sh
 2. Inspect the network
 
 ```bash
-sudo apt install net-tools
+apt install net-tools
 
 netstat -tulpn | grep 1234
 ```

@@ -134,14 +134,20 @@ kubectl apply -f workshop/service-powerapp-mongodb-service.yaml
 
 But what is really happening here? Let's discuss this together.
 
-<!-- ## Exposing applications via Ingress (Minikube users)
+## Exposing applications via Ingress
 
 So far we have exposed the frontend using `ClusterIP`, but accessing the service with the combination `<ip>:<port>` isn't exactly ideal. Time to see something more advanced: `Ingress`
-
-`cd cluster-setup/minikube && make addons`
 
 We can apply the ingress as follows:
 
 ```bash
-kubectl apply -f  ingress/powerapp-ingress.yaml
-``` -->
+kubectl apply -f  workshop/ingress-web.yaml
+```
+
+To access the ingress, edit your local `/etc/hosts` file and add the following line:
+
+```plaintext
+<your cluster master ip> web.test.example
+```
+
+Now you can open another tab in your browser and reach the address: `http://web.test.example:31080`

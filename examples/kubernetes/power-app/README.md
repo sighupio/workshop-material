@@ -115,11 +115,11 @@ Now we can start to expose the pods to the outer world and to each others.
 Let's start with `web`. As I mentioned this is the only pod that will be reachable from outside the cluster.
 
 ```bash
-kubectl apply -f workshop/service-powerapp-web-service.yaml -n dev
+kubectl apply -f workshop/service-powerapp-web-service.yaml
 ```
 Create port-forward tunnel:
 ```bash
-kubectl port-forward svc/powerapp-web-service 8080:80
+kubectl port-forward svc/powerapp-web-service 8080:80 -n dev
 ```
 
 Now visiting `localhost:8080` should show the frontend application.

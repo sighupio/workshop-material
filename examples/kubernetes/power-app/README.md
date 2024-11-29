@@ -41,7 +41,7 @@ This means that the deployment depends on both a ConfigMap called `web` and a Se
 If we try to issue `kubectl apply -f workshop/deployment-powerapp-web.yaml` without having created the ConfigMap and the Secret beforehand, it will result in a failure.
 
 ```bash
-kubectl get pods
+kubectl get pods -n dev
 
 NAME                            READY     STATUS                       RESTARTS   AGE
 powerapp-web-7c675467d8-727cm   0/1       CreateContainerConfigError   0          1m
@@ -57,11 +57,11 @@ configmap "web" created
 
 kubectl apply -f workshop/secret-web.yaml
 secret "web" created
-kubectl get configmaps
+kubectl get configmaps -n dev
 NAME      DATA      AGE
 web       2         15s
 
-kubectl get secrets
+kubectl get secrets -n dev
 NAME                  TYPE                                  DATA      AGE
 default-token-p5g8v   kubernetes.io/service-account-token   3         26s
 web                   Opaque                                1         11s
@@ -90,9 +90,9 @@ We will soon see that all the deployments end up correctly **except for mongodb*
 
 If we want to check the status of what is happening in our cluster, we should use:  
 
-`kubectl describe pod <pod_name>`  
-`kubectl describe deployment <deployment_name>`  
-`kubectl rollout status deployment/<deployment_name>`  
+`kubectl describe pod <pod_name> -n dev`  
+`kubectl describe deployment <deployment_name> -n dev`  
+`kubectl rollout status deployment/<deployment_name> -n dev`  
 
 Can you guess why our mongodb won't get running?
 

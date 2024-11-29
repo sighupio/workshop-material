@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: powerapp-mongodb
+  name: powerapp-mongodb
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: powerapp-mongodb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: powerapp-mongodb
+      name: powerapp-mongodb
+    spec:
+      containers:
+      - image: registry.sighup.io/workshop/mongo:4.1.5-xenial
+        name: powerapp-mongo
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /data/db
+          name: db-data
+      restartPolicy: Always
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: powerapp-db-volume

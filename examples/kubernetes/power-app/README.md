@@ -8,6 +8,12 @@ The end goal of this section is to (obviously) have the application running. In 
 
 The only pod exposed to the outside world is the `frontend`. We will do this in two flavors: via `NodePort` and with an `Ingress`.
 
+Execute:
+
+```bash
+kubectl apply -f workshop/namespace-dev.yaml
+```
+
 ## Prerequisites: ConfigMaps & Secrets
 
 If you have a look at `workshop/deployment-powerapp-web.yaml` you will see that states the follow:

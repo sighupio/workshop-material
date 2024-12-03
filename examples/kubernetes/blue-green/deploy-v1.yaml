@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: beautiful
+  name: beautiful-v1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: beautiful
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: beautiful
+        version: v1
+    spec:
+      containers:
+      - image: httpd:alpine
+        name: httpd

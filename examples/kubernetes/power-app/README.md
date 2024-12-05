@@ -8,11 +8,19 @@ The end goal of this section is to (obviously) have the application running. In 
 
 The only pod exposed to the outside world is the `frontend`. We will do this in two flavors: via `NodePort` and with an `Ingress`.
 
-Execute:
+First of all, execute the following line:
 
 ```bash
 kubectl apply -f workshop/namespace-dev.yaml
 ```
+
+This will create a Namespace named `dev`. We can switch our current context to use this new namespace by default:
+
+```bash
+kubectl config set-context --current --namespace dev
+```
+
+This way, each time we execute `kubectl` it will operate inside the `dev` namespace.
 
 ## Prerequisites: ConfigMaps & Secrets
 
@@ -110,20 +118,46 @@ yet, we have no idea if the application is running or not and we have no idea if
 
 ## Services
 
+### Web
+
 Now we can start to expose the pods to the outer world and to each others.
 
-Let's start with `web`. As I mentioned this is the only pod that will be reachable from outside the cluster.
+Let's start with `web`. As mentioned, this is the only pod that will be reachable from outside the cluster.
 
 ```bash
 kubectl apply -f workshop/service-powerapp-web-service.yaml
 ```
-Create port-forward tunnel:
+
+Check the service to know the NodePort:
+
+```bash
+kubectl get svc powerapp-web-service -n dev
+
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+powerapp-web-service       NodePort    10.107.219.83    <none>        80:30424/TCP   4h59m
+```
+
+Your output may be different: we did not include a specific `nodePort` inside the Service manifest, so Kubernetes will automatically assign a random, free port to it.
+
+Now you have all the information you need to reach the frontend of the application: browse to `http://<your cluster master ip>:<node port>` to see it.
+
+#### Port forward
+
+`kubectl` lets you also create a temporary tunnel to reach Services that are inside the cluster. This is valid also for ClusterIP services.
+
+You may find this functionality useful to quickly check if everything is in place without having to actually expose an application outside of the cluster.
+
+The syntax is: `kubectl port-forward <service name> <local port>:<service port>`. To create a tunnel for the frontend service, run:
+
 ```bash
 kubectl port-forward svc/powerapp-web-service 8080:80 -n dev
 ```
 
-Now visiting `localhost:8080` should show the frontend application.
+Now visiting `http://<your cluster master ip>:8080` should show the frontend application.
 
+### Backend and DB
+
+You probably have noticed some errors inside the web page of our application. Did you figure out why?
 
 We can now rollout services for `backend` and `mongodb` in a similar way. Once that is done, reloading the frontend page should show no error and magically our application works.
 
@@ -136,7 +170,7 @@ But what is really happening here? Let's discuss this together.
 
 ## Exposing applications via Ingress
 
-So far we have exposed the frontend using `ClusterIP`, but accessing the service with the combination `<ip>:<port>` isn't exactly ideal. Time to see something more advanced: `Ingress`
+So far we have exposed the frontend using either a Service with a NodePort or a tunnel, but accessing the service with the combination `<ip>:<port>` isn't exactly ideal. Time to see something more advanced: `Ingress`.
 
 We can apply the ingress as follows:
 
@@ -151,3 +185,19 @@ To access the ingress, edit your local `/etc/hosts` file and add the following l
 ```
 
 Now you can open another tab in your browser and reach the address: `http://web.test.example:31080`
+
+## Cleanup
+
+To cleanup everything, you can just remove the namespace:
+
+```bash
+kubectl delete ns dev
+```
+
+Kubernetes will delete the namespace and every resource that it contains.
+
+Also, remember to reset your context:
+
+```bash
+kubectl config set-context --current --namespace default
+```

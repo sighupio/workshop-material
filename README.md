@@ -108,6 +108,8 @@ This type of exercises will guide you step by step in understanding the various 
 - [X] [Multi Tier App](examples/kubernetes/power-app)
 - [X] [RBAC](examples/kubernetes/rbac)
 - [X] [Network Policies](examples/kubernetes/network-policy)
+- [X] [Blue/Green deployments](examples/kubernetes/blue-green/)
+- [X] [Canary deployments](examples/kubernetes/canary/)
 - [X] [Kustomize](examples/kubernetes/kustomize)
 - [X] [Kustomize multi Env](examples/kubernetes/kustomize-2)
 - [X] [Helm](examples/kubernetes/helm)

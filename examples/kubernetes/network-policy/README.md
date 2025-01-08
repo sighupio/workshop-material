@@ -46,7 +46,7 @@ kubectl exec backend -n test -- curl frontend
 7. Create a `default-deny` network policy both from Ingress and Egress.
 
 ```bash
-kubectl apply -f network-policy/default_deny.yaml
+kubectl apply -f default_deny.yaml
 ```
 8. Check connectivity again
 

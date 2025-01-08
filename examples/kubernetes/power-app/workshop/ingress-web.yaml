@@ -4,11 +4,10 @@ kind: Ingress
 metadata:
   name: web
   namespace: dev
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
   labels:
     app: powerapp-web
 spec:
+  ingressClassName: nginx
   rules:
     - host: web.test.example
       http:

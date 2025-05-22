@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: inf-hjk
+  name: inf-hjk
+  namespace: infra
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: inf-hjk
+  template:
+    metadata:
+      labels:
+        app: inf-hjk
+    spec:
+      containers:
+      - image: httpd:2.4.39-alpine
+        imagePullPolicy: IfNotPresent
+        name: httpd

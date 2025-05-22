@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: web2
+  name: web2
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web2
+  template:
+    metadata:
+      labels:
+        app: web2
+    spec:
+      containers:
+      - image: nginx:1.20.2-alpine
+        imagePullPolicy: IfNotPresent
+        name: nginx

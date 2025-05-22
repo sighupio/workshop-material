@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: web1
+  name: web1
+  namespace: applications
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web1
+  template:
+    metadata:
+      labels:
+        app: web1
+    spec:
+      containers:
+      - image: nginx:1.19.1-alpine-perl
+        imagePullPolicy: IfNotPresent
+        name: nginx

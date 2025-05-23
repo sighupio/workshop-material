@@ -64,7 +64,7 @@ kubectl wait pods --for=condition=Ready --all -n falco
 
 ## Trigger the rule
 ```bash
-kubectl exec -it $(kubectl get pods --selector=app=nginx-offending -o name) -- touch /etc/test_file_for_falco_rule
+kubectl exec -it nginx-offending -- touch /etc/test_file_for_falco_rule
 ```
 
 ## Look at the logs

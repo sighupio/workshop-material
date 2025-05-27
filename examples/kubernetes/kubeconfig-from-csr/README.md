@@ -80,7 +80,7 @@ subjects:
 And verify that the call
 
 ```bash
-KUBECONFIG=kubeconfig kubectl get nodes
+kubectl --kubeconfig=./kubeconfig get nodes
 ```
 
 was successful!

@@ -51,7 +51,7 @@ kubectl get csr my-csr -o jsonpath='{.status.certificate}' | base64 --decode > m
 Now we can use the newly generated kubeconfig to interact with the Kubernetes cluster:
 
 ```bash
-KUBECONFIG=kubeconfig kubectl get nodes
+kubectl --kubeconfig=./kubeconfig get nodes
 ```
 
 But we receive an error:

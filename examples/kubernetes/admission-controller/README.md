@@ -19,11 +19,11 @@ kubectl get pod test1 -oyaml | yq '.spec.containers[0].imagePullPolicy'
 
 ## Backup the `kube-apiserver.yaml` file
 ```bash
-cp /etc/kubernetes/manifest/kube-apiserver.yaml ~/kube-apiserver.yaml.bak
+cp /etc/kubernetes/manifests/kube-apiserver.yaml ~/kube-apiserver.yaml.bak
 ```
 
 ## Ensure the AdmissionController directive is present
-In the control plane node, open the `/etc/kubernetes/manifest/kube-apiserver.yaml` static pod manifest and make sure the following line is present.
+In the control plane node, open the `/etc/kubernetes/manifests/kube-apiserver.yaml` static pod manifest and make sure the following line is present.
 ```yaml
 # ...
   args:
@@ -34,7 +34,7 @@ In the control plane node, open the `/etc/kubernetes/manifest/kube-apiserver.yam
 ```
 
 ## Add the AlwaysPullImages AdmissionController
-Edit the `/etc/kubernetes/manifest/kube-apiserver.yaml` static pod manifest to include the `AlwaysPullImages` AdmissionController.
+Edit the `/etc/kubernetes/manifests/kube-apiserver.yaml` static pod manifest to include the `AlwaysPullImages` AdmissionController.
 
 ```yaml
 # ...
@@ -64,5 +64,5 @@ kubectl get pod test2 -oyaml | yq '.spec.containers[0].imagePullPolicy'
 
 ## Restore the API server backup
 ```bash
-cp ~/kube-apiserver.yaml.bak /etc/kubernetes/manifest/kube-apiserver.yaml 
+cp ~/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml 
 ```

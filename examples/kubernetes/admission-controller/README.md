@@ -62,7 +62,7 @@ kubectl get pod test2 -oyaml | yq '.spec.containers[0].imagePullPolicy'
 # It should return Always
 ```
 
-## Restore the API server backup
+## Wait for the API server to come back
 ```bash
-cp ~/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml 
+watch kubectl get nodes
 ```

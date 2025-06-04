@@ -17,7 +17,7 @@ image2:latest|CVE-2021-28831:no|CVE-2016-9841:no
 
 Please make sure that you put the image:tag as the first column, CVE-2021-28831 as second and CVE-2016-9841 as third and then run the following command:
 ```bash
-cat solution.txt | sort | tr -d " \t\n\r" | sha256
+cat solution.txt | sort | tr -d " \t\n\r" | sha256sum
 ```
 
 You should obtain this exact hash!

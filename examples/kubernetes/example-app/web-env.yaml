@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-env
+data:
+  COMPANY: ReeVo spa
+  SOME_VAR: Just a random variable

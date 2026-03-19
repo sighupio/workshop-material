@@ -170,5 +170,5 @@ kubectl exec -it imaginarygame-c587857bf-mrxzd -- ls /etc/game-secrets
 Let's clean:
 
 ```bash
-kubectl delete -f configmaps/cm.yaml example-app/secret.yaml example-app/web-env.yaml configmaps/deploy.yaml
+kubectl delete -f configmaps/cm.yaml -f example-app/secret.yaml -f example-app/web-env.yaml -f configmaps/deploy.yaml
 ```

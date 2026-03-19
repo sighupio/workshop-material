@@ -24,7 +24,7 @@ or by `yaml` file:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: example-configmap
+  name: game-configmap
 data:
   # property-like keys
   game-properties-file-name: game.properties
@@ -49,13 +49,13 @@ data:
 ### Retrieving ConfigMaps
 
 To display all currently available configmaps in the `default` namespace: `kubectl get configmap`
-To get the related yaml file: `kubectl get configmap <configmap-name> -o yaml`
+To get the related yaml file: `kubectl get configmap game-configmap -o yaml`
 
 ## How to create a secret
 
 You can create a secret by CLI:
 
-`kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt`
+`kubectl create secret generic db-user-pass --from-literal=username=admin --from-literal=password=1f2d1e2e67df`
 
 or by `yaml` file:
 
@@ -138,7 +138,7 @@ spec:
       # consume an entire secret as a volume
       - name: secret-volume
         secret:
-          name: mysecret
+          secretName: mysecret
 ```
 
 Let's deploy and check all resources:

@@ -47,4 +47,4 @@ spec:
             path: cfg/game.properties
       - name: secret-volume
         secret:
-          name: mysecret
+          secretName: mysecret
